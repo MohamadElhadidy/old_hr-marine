@@ -1,0 +1,211 @@
+{% extends "dash_base.php" %}
+
+{% block title %}
+إضافة أجازة
+{% endblock %}
+{% block style %}
+{% endblock %}
+
+{% block body %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item active">إضافة أجازة</li>
+                        <li class="breadcrumb-item">الأجازات</li>
+                        <li class="breadcrumb-item"><a href="../Dashboard/index">الرئيسية</a></li>
+
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content" dir="">
+        <form method="post" enctype="multipart/form-data" autocomplete="off" id="myForm" name="myForm" onsubmit="return validateForm()"
+              action="saveHoliday">
+            <div class="container-fluid">
+                <!-- left column -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <!-- general form elements -->
+                        <div class="card bg-gradient-primary">
+
+                            <div class="card-header">
+
+
+                                <!-- tools card -->
+                                <div class="card-tools">
+                                    <!-- button with a dropdown -->
+                                    <button type="button" class="btn btn-primary btn-sm" data-card-widget="collapse">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+
+                                </div>
+                                <!-- /.card-header -->
+                                <!-- form start -->
+                                <h3 class="card-title" style="text-align: center;">
+                                    بيانات الأجازة
+                                </h3>
+                                <!-- /. tools -->
+                            </div>
+                            <div class="card-body" dir="rtl">
+                                <div class="row">
+                                    <div class="form-group col-lg-6 col-sm-12">
+                                        <select class="form-control select2"
+                                                name="employee">
+                                            <option selected="selected" disabled  value="">اسم الموظف</option>
+                                            {% for employee in employees%}
+                                            <option value="{{employee.id}}">{{employee.name}}</option>
+                                            {% endfor%}
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-lg-6 col-sm-12">
+                                        <input type="text"   class="form-control"
+                                               name="duration"   placeholder="مدة الأجازة"/>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-lg-6 col-sm-12">
+                                    <select class="form-control select2"
+                                            name="type">
+                                        <option selected="selected" disabled  value="">نوع الأجازة</option>
+                                        {% for holiday_type in holidayType%}
+                                        <option value="{{holiday_type.id}}">{{holiday_type.name}}</option>
+                                        {% endfor%}
+                                    </select>
+                                    </div>
+                                    <div class="form-group col-lg-6 col-sm-12">
+                                        <input type="text" class="form-control"
+                                               name="cause"   placeholder="سبب الأجازة"/>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-lg-6 col-sm-12">
+                                        <input class="date-own form-control" id="datepicker" name="date"
+                                               placeholder="تاريخ الأجازة" readonly type="text">
+                                    </div>
+                                    <div class="form-group col-lg-6 col-sm-12">
+                                        <input type="text"   class="form-control"
+                                               name="notes"   placeholder="ملاحظات"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                    </div>
+                </div>
+                <div class="card bg-gradient-primary">
+
+                    <div class="card-header">
+
+
+                        <!-- tools card -->
+                        <div class="card-tools">
+                            <!-- button with a dropdown -->
+                            <button type="button" class="btn btn-primary btn-sm" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+                        <h3 class="card-title" style="text-align: center;">
+                           المرفقات
+                        </h3>
+                        <!-- /. tools -->
+                    </div>
+                    <div class="card-body" dir="rtl">
+                        <div class="row">
+                            <div class="form-group col-lg-12 col-sm-12">
+                                <label>مستند  طلب الأجازة</label>
+                                <div class="custom-file">
+                                    <input type="file"  name="file" class="custom-file-input" id="customFile">
+                                    <label class="custom-file-label" for="customFile">إضافة ملف</label>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+                <!-- /.card -->
+
+                <div class="form-group col-lg-12 col-sm-12">
+                    <input type="submit" id="save" class="btn btn-primary" value="حفظ البيانات">
+                </div>
+            </div><!-- /.container-fluid -->
+        </form>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+{% endblock %}
+{% block footer %}
+
+<script>
+
+    function validateForm() {
+
+        const x1 = document.forms["myForm"]["employee"].value;
+        const x2= document.forms["myForm"]["duration"].value;
+        const x3 = document.forms["myForm"]["type"].value;
+        const x4 = document.forms["myForm"]["cause"].value;
+        const x5 = document.forms["myForm"]["date"].value;
+        const x6 = document.forms["myForm"]["file"].value;
+
+        const fileExtension = ['jpg', 'jpeg', 'png', 'doc', 'docx', 'xml', 'xlxs', 'ppt', 'ppts', 'pdf'];
+
+        const file = x6.slice((x6.lastIndexOf(".") - 1 >>> 0) + 2);
+
+
+
+        if (x1 == "" || x1 == null ) {
+            createAlert('','ادخل اسم الموظف','','danger',true,true,'pageMessages');
+            document.forms["myForm"]["employee"].focus();
+            return false;
+
+        }
+        if (x2 == "" || x2 == null || x2.match(/^\d+$/) == null ){
+            createAlert('','ادخل  مدة الأجازة بشكل صحيح','','danger',true,true,'pageMessages');
+            document.forms["myForm"]["duration"].focus();
+            return false;
+        }
+        if (x3 == "" || x3 == null) {
+            createAlert('','ادخل نوع الأجازة   ','','danger',true,true,'pageMessages');
+            document.forms["myForm"]["type"].focus();
+            return false;
+        }
+        if (x4== "" || x4 == null) {
+            createAlert('','ادخل سبب الأجازة   ','','danger',true,true,'pageMessages');
+            document.forms["myForm"]["cause"].focus();
+            return false;
+        }
+        if (x5== "" || x5 == null) {
+            createAlert('','ادخل تاريخ الأجازة   ','','danger',true,true,'pageMessages');
+            document.forms["myForm"]["date"].focus();
+            return false;
+        }
+       if (x6 == "" || x6 == null) {
+           return true;
+        }
+        else if (!fileExtension.includes(file)) {
+            createAlert('', 'صيغة    مستند الأجازة  غير مدعومة', '', 'danger', true, true, 'pageMessages');
+            return false;
+        }
+    }
+</script>
+<script>
+    $("#holidays").last().addClass("active");
+    $("#holidays_new").last().addClass("active");
+</script>
+{% endblock %}

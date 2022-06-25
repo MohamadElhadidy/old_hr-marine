@@ -1,0 +1,135 @@
+{% extends "dash_base.php" %}
+
+{% block title %}
+المرفقات الوظيفية
+{% endblock %}
+{% block style %}
+{% endblock %}
+
+{% block body %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item active">المرفقات الوظيفية</li>
+                        <li class="breadcrumb-item">الموظفين</li>
+                        <li class="breadcrumb-item"><a href="../Dashboard/index">الرئيسية</a></li>
+
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content" dir="">
+        <div class="container-fluid">
+            <!-- left column -->
+            <!-- general form elements -->
+
+            <div class="card bg-gradient-light">
+
+                <div class="card-header bg-gradient-primary">
+
+
+                    <!-- tools card -->
+                    <div class="card-tools">
+                        <!-- button with a dropdown -->
+                        <button type="button" class="btn btn-primary btn-sm" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <h3 class="card-title" style="text-align: center;">
+                        المرفقات الوظيفية
+                    </h3>
+                    <!-- /. tools -->
+                </div>
+                <div class="card-body" col-lg-12 col-sm-12 dir="rtl" id="files">
+                    <div class="row ">
+                        <div class="form-group col-lg-2 col-sm-12">
+                            <label>السيرة الذاتية</label>
+                            <a  href="../{{data.cv}}" download
+                               id="1" 
+                            ><li class="fa fa-download"></li></a>
+                        </div>
+                        <div class="form-group col-lg-2 col-sm-12">
+                            <label>طلب الإلتحاق</label>
+                            <a href="../{{data.job_application}}" download  id="2"  ><li class="fa fa-download"></li></a>
+                        </div>
+                        <div class="form-group col-lg-2 col-sm-12">
+                            <label>البطاقة الشخصية</label>
+                            <a  href="../{{data.identification_card}}" id="3" download
+                                 ><li class="fa fa-download"></li></a>
+                        </div>
+                        <div class="form-group col-lg-2 col-sm-12">
+                            <label>شهادة الميلاد</label>
+                            <a   href="../{{data.birth_certificate}}" download  id="4"   
+                                  ><li class="fa fa-download"></li></a>
+                        </div>
+                        <div class="form-group col-lg-2 col-sm-12">
+                            <label>شهادة المؤهل الدراسي</label>
+                            <a   href="../{{data.qualification_certificate}}" download  id="5" onclick="clickOn(this.id)"
+                                 ><li class="fa fa-download"></li></a>
+                        </div>
+                        <div class="form-group col-lg-2 col-sm-12">
+                            <label>شهادة الجيش</label>
+                            <a   href="../{{data.army_certificate}}" download  id="6" 
+                                 class="../{{data.army_certificate}}" ><li class="fa fa-download"></li></a>
+                        </div>
+                        <div class="form-group col-lg-2 col-sm-12">
+                            <label>صحيفة الحالة الجنائية</label>
+                            <a  href="../{{data.criminal_sheet}}" download   id="7"  ><li class="fa fa-download"></li></a>
+                        </div>
+                        <div class="form-group col-lg-2 col-sm-12">
+                            <label>سجل تدريب</label>
+                            <a  href="../{{data.training_record}}" download  id="8"  ><li class="fa fa-download"></li></a>
+                        </div>
+                        <div class="form-group col-lg-2 col-sm-12">
+                            <label>رخصة قيادة</label>
+                            <a href="../{{data.driving_license}}" download  id="9"  ><li class="fa fa-download"></li></a>
+                        </div>
+                        <div class="form-group col-lg-2 col-sm-12">
+                            <label>رخصة معدة</label>
+                            <a  href="#files" id="10" onclick="clickOn(this.id)"
+                                class="../{{data.equipment_license}}" ><li class="fa fa-download"></li></a>
+                        </div>
+                    </div>
+                </div>
+            </div></div>
+
+        <!-- /.card-body -->
+        <!-- Form Element sizes -->
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+{% endblock %}
+{% block footer %}
+<script>
+    $("#employees").last().addClass("active");
+    $("#employee").last().addClass("active");
+    $("#employee_report").last().addClass("active");
+</script>
+<script>
+    function clickOn(id) {
+        let x1 = document.getElementById(id).className;
+        const n = x1.includes("employees");
+        if (n){
+            window.open(x1, '_blank');
+        }
+        else {
+            createAlert('', '  لايوجد ملف أو صورة مرفقة', '', 'danger', true, true, 'pageMessages');
+            return false;
+        }
+    }
+</script>
+{% endblock %}

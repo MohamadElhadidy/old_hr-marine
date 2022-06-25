@@ -1,0 +1,127 @@
+{% extends "dash_base.php" %}
+
+{% block title %}
+تعديل وظيفة
+{% endblock %}
+{% block style %}
+
+{% endblock %}
+
+{% block body %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item active">تعديل وظيفة</li>
+                        <li class="breadcrumb-item">الوظائف</li>
+                        <li class="breadcrumb-item"><a href="../Dashboard/index">الرئيسية</a></li>
+
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content" dir="">
+        <form method="post" enctype="multipart/form-data" autocomplete="off" id="myForm" name="myForm" onsubmit="return validateForm()"
+              action="editJob">
+            <div class="container-fluid">
+                <!-- left column -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <!-- general form elements -->
+                        <div class="card bg-gradient-primary">
+
+                            <div class="card-header">
+
+
+                                <!-- tools card -->
+                                <div class="card-tools">
+                                    <!-- button with a dropdown -->
+                                    <button type="button" class="btn btn-primary btn-sm" data-card-widget="collapse">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+
+                                </div>
+                                <!-- /.card-header -->
+                                <!-- form start -->
+                                <h3 class="card-title" style="text-align: center;">
+                                    بيانات الوظيفة
+                                </h3>
+                                <!-- /. tools -->
+                            </div>
+                            <div class="card-body" dir="rtl">
+                                <div class="row">
+                                    <div class="form-group col-lg-12 col-sm-12">
+                                        <input type ="hidden" value="{{job.id}}"
+                                               name="id"  />
+                                        <input type="text" id="job_name" class="form-control" value="{{job.name}}"
+                                               name="name"   placeholder="اسم الوظبفة"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card -->
+
+                <div class="form-group col-lg-12 col-sm-12">
+                    <input type="submit" id="save" class="btn btn-primary" value="حفظ البيانات">
+                </div>
+            </div><!-- /.container-fluid -->
+        </form>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+{% endblock %}
+{% block footer %}
+
+<script>
+
+    function validateForm() {
+
+        const x1 = document.forms["myForm"]["name"].value;
+
+
+
+        if (x1 == "" || x1 == null ) {
+            createAlert('','ادخل اسم الوظيفة','','danger',true,true,'pageMessages');
+            document.forms["myForm"]["name"].focus();
+            return false;
+        }
+
+
+    }
+</script>
+<script>
+    $(document).ready(function () {
+        let id  = document.getElementById('job_name').value;
+        $('#myForm').validate({
+            rules: {
+                name: {
+                    remote: '../Account/ValidateEdit?jobs&'+id
+                }
+            },
+            messages: {
+                name: {
+                    remote:'اسم الوظيفة موجود بالفعل'
+                }
+            }
+        });
+    });
+</script>
+<script>
+    $("#jobs").last().addClass("active");
+    $("#jobs_report").last().addClass("active");
+</script>
+
+{% endblock %}

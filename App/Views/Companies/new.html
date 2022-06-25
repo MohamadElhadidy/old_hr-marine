@@ -1,0 +1,142 @@
+{% extends "base.php" %}
+
+{% block title %}منظومة الموارد البشرية{% endblock %}
+
+{% block style %}
+<style>
+    body {
+        height: 100vh;
+        width: 100%;
+        background: #ededed;
+         justify-content: center;
+        display: flex;
+       
+    }
+
+    .header {
+        margin-top: 5vh;
+        position: absolute;
+        text-align: center;
+    }
+
+    .card {
+        position: relative;
+        margin-top: 40vh;
+        width: 95%;
+        max-width: 460px;
+        height: 250px;
+        box-sizing: border-box;
+        perspective: 800px;
+        border-radius: 16px;
+        display: inline-block;
+        text-align: center;
+    }
+
+    .card__title {
+        color: #fff;
+        font-size: 2em;
+    }
+
+    a:hover {
+        text-decoration: none;
+    }
+
+    .card--front,
+    .card--back {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        box-sizing: border-box;
+        width: inherit;
+        height: inherit;
+        box-shadow: 8px 8px 2px 1px rgba(0, 0, 255, 0.1);
+        border-radius: 16px;
+        border: 8px solid white;
+        padding: 16px 24px;
+        background: blue;
+        backface-visibility: hidden;
+        transition: all 0.85s;
+    }
+
+    .card--front {
+        transform: rotatey(0d);
+        background: linear-gradient(to left, #848484, #070217);
+    }
+
+    .card--back {
+        transform: rotatey(-180deg);
+        background: linear-gradient(to left, #f23d64, #bd0b32);
+    }
+
+    .card:hover .card--front {
+        transform: rotatey(-180deg);
+    }
+
+    .card:hover .card--back {
+        transform: rotatey(0);
+    }
+
+    .logo {
+        animation: turn 5s infinite linear;
+    }
+
+    @keyframes turn {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    .all{
+        width: 100vw;
+        display: contents;
+    }
+</style>
+{% endblock %}
+{% block footer %}
+
+{% endblock %}
+{% block body %}
+<div class="header">
+    <img class='logo' src='../images/logo.png' />
+    <h1>Marine Company</h1>
+</div>
+<div class="all">
+{% set company_ar = ''%}
+{% set company_en = ''%}
+{% for Permission in getCompaniesPermission%}
+{% for company in companies%}
+{% if Permission.company_id == company.id %}
+{% set company_id = company.id %}
+{% set company_ar = company.name_ar %}
+{% set company_en = company.name_en %}
+{% endif%}
+{% endfor%}
+
+<div class="card">
+    <div class="card--front">
+        <h2 class="card__title">
+            {{company_ar}}
+        </h2>
+    </div>
+    <form class="card--back" method="post" action="../Companies/report" id="{{loop.index}}">
+        <input type='hidden' name='id' value='{{Permission.company_id}}'>
+        <a href="#" id="{{loop.index}}" onclick="myFunction(this.id)">
+            <h2 class="card__title">
+                {{company_en}}
+            </h2>
+        </a>
+    </form>
+</div>
+<script>
+    function myFunction(id) {
+        document.getElementById(id).submit();
+    }
+</script>
+{% endfor %}
+</div>
+{% endblock %}

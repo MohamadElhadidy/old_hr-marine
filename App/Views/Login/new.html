@@ -1,0 +1,236 @@
+{% extends "base.php" %}
+
+{% block title %}منظومة الموارد البشرية{% endblock %}
+
+{% block style %}
+<style>
+	:root {
+		--main: #222132;
+		--primary: #b8b8b0;
+		--secondary: deepskyblue;
+	}
+
+	html {
+		box-sizing: border-box;
+	}
+
+	*,
+	*:after,
+	*:before {
+		box-sizing: inherit;
+	}
+
+	body {
+		background-color: var(--main);
+		direction: rtl;
+		font-size: 18px;
+		text-align: center !important;
+	}
+
+	.container-login {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 100vh;
+	}
+
+	.box-login {
+		width: 100%;
+		width: 100%;
+		max-width: 25em;
+		min-height: 25em;
+		padding: 2em 1em;
+	}
+
+	.box-login h1 {
+		font-size: 1.8rem !important;
+		font-weight: 900;
+		margin: 0 0 .5em;
+		padding: 0;
+		color: var(--primary);
+	}
+
+	.box-login h2 {
+		font-size: 1.2em;
+		font-weight: 900;
+		margin: 0 0 2.5em 0;
+		padding: 0;
+		color: var(--primary);
+
+	}
+
+	.form-wrap {
+		width: 100%;
+	}
+
+	.input-login-box {
+		position: relative;
+		margin: 0 auto 3em;
+	}
+
+	.form-wrap .input-login-box:last-child {
+		margin: -1em 0 0;
+	}
+
+	.input-login-box .input-login {
+		position: relative;
+		display: block;
+		font-size: 14px;
+		font-weight: 400;
+		text-align: center !important;
+		height: 3em;
+		width: 100%;
+		line-height: 3;
+		background-color: transparent;
+		color: #fff;
+		padding: 0 1em;
+		border-radius: 0.2em;
+		border: 2px solid transparent;
+		outline: none;
+		transition: border-color 500ms ease;
+		z-index: 1;
+	}
+
+	.input-login-box label {
+		position: absolute;
+		top: 0;
+		left: 0;
+		display: block;
+		font-size: 14px;
+		font-weight: 400;
+		width: 100%;
+		height: 100%;
+		padding: 0 1em;
+		line-height: 3;
+		border-radius: 0.2em;
+		transform: translateY(0);
+		transition: transform 500ms ease, color 500ms ease,
+			background-color 500ms ease, border-radius 500ms ease;
+	}
+
+	.input-login-box input::-webkit-input-placeholder {
+		/* WebKit browsers */
+		color: transparent;
+	}
+
+	.input-login-box input:-moz-placeholder {
+		/* Mozilla Firefox 4 to 18 */
+		color: transparent;
+	}
+
+	.input-login-box input::-moz-placeholder {
+		/* Mozilla Firefox 19+ */
+		color: transparent;
+	}
+
+	.input-login-box input:-ms-input-placeholder {
+		/* Internet Explorer 10+ */
+		color: transparent;
+	}
+
+	.input-login-box .input-login:placeholder-shown {
+		border-color: var(--primary);
+	}
+
+	.input-login-box .input-login:placeholder-shown~label {
+		background: transparent;
+		color: var(--primary);
+	}
+
+	.input-login-box .input-login:focus {
+		border-color: rgb(250, 148, 146);
+		border-radius: 0 0 0.2em 0.2em;
+	}
+
+	.input-login-box .input-login:focus~label {
+		color: #222132;
+		background-color: rgb(250, 148, 146);
+		border-radius: 0.2em 0.2em 0 0;
+		transform: translateY(-99%);
+	}
+
+	.input-login-box .input-login:valid {
+		border-color: #affdc5;
+		border-radius: 0 0 0.2em 0.2em;
+	}
+
+	.input-login-box .input-login:valid~label {
+		color: #222132;
+		background-color: #affdc5;
+		transform: translateY(-99%);
+		border-radius: 0.2em 0.2em 0 0;
+	}
+
+	.input-login-box .btn-submit {
+		display: inline-flex;
+		justify-content: center;
+		align-items: center;
+		font-size: 14px;
+		text-align: center;
+		padding: 0.7em 1.4em;
+		margin-bottom: 1em;
+		background: #107aec;
+		color: 222132;
+		outline: none;
+		border: none;
+		border-radius: 0.2em;
+		cursor: pointer;
+		color: #fff;
+	}
+
+	.input-login-box .btn-submit:active,
+	.input-login-box .btn-submit:focus {
+		border: 2px solid var(--secondary);
+	}
+
+	.input-login-box .btn-submit:hover {
+		background-color: #2ac3ff;
+		color: #000;
+	}
+
+	.logo {
+		animation: turn 5s infinite linear;
+		width: 100px;
+		height: 100px;
+	}
+
+	@keyframes turn {
+		0% {
+			transform: rotate(0deg);
+		}
+
+		100% {
+			transform: rotate(360deg);
+		}
+	}
+</style>
+{% endblock %}
+{% block footer %}
+
+{% endblock %}
+{% block body %}
+<div class="container-login">
+	<div class="box-login">
+		<img class='logo' src='../images/logo.png'>
+		<h1>Marine Company</h1>
+		<h2>منظومة الموارد البشرية</h2>
+		<div class="form-wrap">
+			<form action="create" autocomplete="on" method="post">
+				<div class="input-login-box">
+					<input class="input-login" type="email" name="email" value="{{ email }}"
+						placeholder="البريد الالكترونى" required>
+					<label for="username">البريد الالكترونى</label>
+				</div>
+				<div class="input-login-box">
+					<input type="password" class="input-login" id="password" name="password" placeholder="رمز عبور"
+						required>
+					<label for="password">كلمة المرور</label>
+				</div>
+				<div class="input-login-box">
+					<input type="submit" class="btn-submit" value="تسجيل دخول" required>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock %}

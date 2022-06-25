@@ -1,0 +1,958 @@
+{% extends "dash_base.php" %}
+
+{% block title %}
+تعديل  موظف
+{% endblock %}
+{% block style %}
+{% endblock %}
+
+{% block body %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item active">تعديل  موظف</li>
+                        <li class="breadcrumb-item">الموظفين</li>
+                        <li class="breadcrumb-item"><a href="../Dashboard/index">الرئيسية</a></li>
+
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content" dir="">
+        <form method="post" enctype="multipart/form-data"  autocomplete="off" id="myForm" name="myForm" onsubmit="return validateForm()"
+              action="EditData">
+            <div class="container-fluid">
+                <!-- left column -->
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="card bg-gradient-light">
+                            <div class="card-header bg-gradient-primary">
+
+
+                                <!-- tools card -->
+                                <div class="card-tools">
+                                    <!-- button with a dropdown -->
+                                    <button type="button" class="btn btn-primary btn-sm" data-card-widget="collapse">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+
+                                </div>
+                                <!-- /.card-header -->
+                                <!-- form start -->
+                                <h3 class="card-title" style="text-align: center;">
+                                    الصورة الشخصية
+                                </h3>
+                                <!-- /. tools -->
+                            </div>
+                            <div class="card-body" dir="rtl" id="image">
+                                <div class="row">
+                                    <div class="form-group col-lg-12 col-sm-12">
+                                        <div class="form-group">
+                                            <div class="preview-zone hidden">
+                                                <div class="box box-solid">
+                                                    <div class="box-header with-border" style="background-color: transparent;">
+                                                        <div class="box-tools pull-right">
+                                                            <button type="button" class="btn btn-danger btn-xs remove-preview">
+                                                                <i class="fa fa-times"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="box-body"></div>
+                                                </div>
+                                            </div>
+
+                                            <div class="dropzone-wrapper" id="dropzone-wrapper" dir="ltr">
+                                                <input type="file" style="text-align: center;" name="personal_photo"
+                                                       accept="image/*" class="dropzone /">
+                                                <div class="dropzone-desc">
+                                                    <i class="glyphicon glyphicon-download-alt"></i>
+                                                    <p>اختر الصورة الشخصية</p>
+                                                </div>
+
+                                            </div>
+                                            <a href="#image"
+                                               id="_"  onclick="clickOn(this.id)"
+                                                    class="../{{employee.personal_photo}}" ><li class="fa fa-download"></li></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-lg-9">
+                        <!-- general form elements -->
+                        <div class="card bg-gradient-primary">
+
+                            <div class="card-header">
+
+
+                                <!-- tools card -->
+                                <div class="card-tools">
+                                    <!-- button with a dropdown -->
+                                    <button type="button" class="btn btn-primary btn-sm" data-card-widget="collapse">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+
+                                </div>
+                                <!-- /.card-header -->
+                                <!-- form start -->
+                                <h3 class="card-title" style="text-align: center;">
+                                    البيانات الشخصية
+                                </h3>
+                                <!-- /. tools -->
+                            </div>
+                            {% set residence_governorate = "" %}
+                            {% set place_of_birth_governorate = "" %}
+                            {% set residence_city = "" %}
+                            {% set place_of_birth_city = "" %}
+
+                            {% for governorate in governorates%}
+                            {% if employee.residence_governorate == governorate.id %}
+                            {% set residence_governorate =  governorate.governorate_name %}
+                            {% endif%}
+                            {% if employee.place_of_birth_governorate == governorate.id %}
+                            {% set place_of_birth_governorate =  governorate.governorate_name %}
+                            {% endif%}
+                            {% endfor%}
+
+                            {% for city in cities%}
+                            {% if employee.residence_city == city.id %}
+                            {% set residence_city =  city.city_name %}
+                            {% endif%}
+                            {% if employee.place_of_birth_city == city.id %}
+                            {% set place_of_birth_city =  city.city_name %}
+                            {% endif%}
+                            {% endfor%}
+                            <div class="card-body" dir="rtl">
+                                <div class="row">
+                                    <input type="hidden" class="form-control"
+                                           name="id" value="{{employee.id}}" />
+
+                                <div class="form-group col-lg-6 col-sm-12">
+
+                                    <input type="text" class="form-control"
+                                           name="orderBy" id="orderBy"  value="{{employee.orderBy}}"   placeholder="الترتيب"/>
+                                </div>
+                                <div class="form-group col-lg-6 col-sm-12">
+
+                                <input type="text" class="form-control"
+                                           name="name" id="name" value="{{employee.name}}"   placeholder="الاسم"/>
+                                </div>
+                                </div>
+                                <div class="row">
+                                    
+                                    <div class="form-group col-lg-4 col-sm-12">
+                                        <div class="form-group col-lg-12 col-sm-12">
+                                       محافظة  العنوان 
+                                    </div>
+                                        <select class="form-control select2"
+                                                name="residence_governorate"
+                                                id="address" onchange="getCities(this.value,this.id)">
+                                            <option selected="selected"  value="{{employee.residence_governorate}}">{{residence_governorate}}</option>
+                                            {% for governorate in governorates%}
+                                            <option value="{{governorate.id}}">{{governorate.governorate_name}}</option>
+                                            {% endfor%}
+                                        </select>
+                                    </div>
+                            <div class="form-group col-lg-4 col-sm-12">
+                                         <div class="form-group col-lg-12 col-sm-12">
+                                        مركز   /  مدينة العنوان 
+                                    </div>
+                                        <select class="form-control select2"
+                                                id="cities_address" name="residence_city">
+                                            <option selected="selected"  value="{{employee.residence_city}}">{{residence_city}}</option>
+                                            {% for city in cities %}
+                                            {% if employee.residence_governorate  == city.gov_id  %}
+                                           <option value="{{city.city_name}}">{{city.city_name}}</option>
+                                            {% endif %}
+                                            {% endfor%}
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-lg-4 col-sm-12">
+                                        <div class="form-group col-lg-12 col-sm-12">
+                                       الحي / الشارع / القرية
+                                    </div>
+                                        <input type="text" class="form-control" name="residence_street"
+                                               id="exampleInputText1" value="{{employee.residence_street}}"
+                                               placeholder="الحي / الشارع / القرية">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-lg-6 col-sm-12">
+                                        <input type="text" class="form-control"   value="{{employee.telephone}}"
+                                               name="telephone"
+                                               placeholder="رقم التليفون">
+                                    </div>
+                                    <div class="form-group col-lg-6 col-sm-12">
+                                        <input type="text" class="form-control"  value="{{employee.identification_id}}"
+                                               name="identification_id" id="identification_id"
+                                               placeholder="الرقم القومي">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                   
+                                    <div class="form-group col-lg-4 col-sm-12">
+                                         <div class="form-group col-lg-12 col-sm-12">
+                                        محافظة محل الميلاد 
+                                    </div>
+                                        <select class="form-control select2" id="place_of_birth"
+                                                name="place_of_birth_governorate"
+                                                onchange="getCities(this.value,this.id)">
+                                            <option selected="selected"  value="{{employee.place_of_birth_governorate}}">{{place_of_birth_governorate}}</option>
+                                            {% for governorate in governorates%}
+                                            <option value="{{governorate.id}}">{{governorate.governorate_name}}</option>
+                                            {% endfor%}
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-lg-4 col-sm-12">
+                                        <div class="form-group col-lg-12 col-sm-12">
+                                        مركز / مدينة محل الميلاد 
+                                    </div>
+                                        <select class="form-control select2" name="place_of_birth_city"
+                                                id="place_of_birth_cities">
+                                            <option selected="selected"  value="{{employee.place_of_birth_city}}">{{place_of_birth_city}}</option>
+                                             {% for city in cities %}
+                                            {% if employee.place_of_birth_governorate  == city.gov_id  %}
+                                           <option value="{{city.city_name}}">{{city.city_name}}</option>
+                                            {% endif %}
+                                            {% endfor%}
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-lg-4 col-sm-12">
+                                         <div class="form-group col-lg-12 col-sm-12">
+                                       الحي / الشارع / القرية
+                                    </div>
+                                        <input type="text" class="form-control"  value="{{employee.place_of_birth_street}}"
+                                               name="place_of_birth_street"
+                                               placeholder="الحي / الشارع / القرية">
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-lg-4 col-sm-12">
+                                        <label>تاريخ الميلاد</label>
+                                        <div  class="input-group date datepicker" data-date-format="dd-mm-yyyy">
+                                            <input type="text" readonly name="date_of_birth" id="datepicker"
+                                                   placeholder="{{employee.date_of_birth}}"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-4 col-sm-12">
+                                        <label>الموقف من التجنيد</label>
+                                        <select class="form-control select2"
+                                                name="army_status">
+                                            {% set army_status = "" %}
+                                            {% for army_stat in armyStatus%}
+                                            {% if employee.army_status == army_stat.id %}
+                                            {% set army_status =  army_stat.name %}
+                                            {% endif%}
+                                            {% endfor%}
+                                            <option selected="selected"  value="{{employee.army_status}}">{{army_status}}</option>
+                                            {% for army_status in armyStatus%}
+                                            {% if employee.army_status == army_status.id %}
+                                            {% else%}
+                                            <option value="{{army_status.id}}">{{army_status.name}}</option>
+                                            {% endif%}
+                                            {% endfor%}
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-lg-4 col-sm-12">
+                                        <label>الحالة الاجتماعية</label>
+                                        <select class="form-control select2"
+                                                name="marital_status">
+                                            {% set marital_status = "" %}
+                                            {% for marital_stat in maritalStatus%}
+                                            {% if employee.marital_status == marital_stat.id %}
+                                            {% set marital_status =  marital_stat.name %}
+                                            {% endif%}
+                                            {% endfor%}
+                                            <option selected="selected"  value="{{employee.marital_status}}">{{marital_status}}</option>
+                                            {% for marital_status in maritalStatus%}
+                                            {% if employee.marital_status == marital_status.id %}
+                                            {% else%}
+                                            <option value="{{marital_status.id}}">{{marital_status.name}}</option>
+                                            {% endif%}
+                                            {% endfor%}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card -->
+                <div class="card bg-gradient-primary">
+                    <div class="card-header">
+
+
+                        <!-- tools card -->
+                        <div class="card-tools">
+                            <!-- button with a dropdown -->
+                            <button type="button" class="btn btn-primary btn-sm" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+                        <h3 class="card-title" style="text-align: center;">
+                            بيانات التعليم
+                        </h3>
+                        <!-- /. tools -->
+                    </div>
+                    <div class="card-body" dir="rtl">
+                        <div class="row">
+                            <div class="form-group col-lg-4 col-sm-12">
+                                 <div class="form-group col-lg-12 col-sm-12">
+                                      نوع المؤهل
+                                    </div>
+                                <select class="form-control select2"
+                                        name="qualification_type">
+                                    {% set qualification_type = "" %}
+                                    {% for qualification_ty in qualificationType%}
+                                    {% if employee.qualification_type == qualification_ty.id %}
+                                    {% set qualification_type =  qualification_ty.name %}
+                                    {% endif%}
+                                    {% endfor%}
+                                    <option selected="selected"  value="{{employee.qualification_type}}">{{qualification_type}}</option>
+                                    {% for qualification_type in qualificationType%}
+                                    {% if employee.qualification_type == qualification_type.id %}
+                                    {% else%}
+                                    <option value="{{qualification_type.id}}">{{qualification_type.name}}</option>
+                                    {% endif%}
+                                    {% endfor%}
+                                </select>
+                            </div>
+                            <div class="form-group col-lg-4 col-sm-12">
+                                 <div class="form-group col-lg-12 col-sm-12">
+                                      تاريخ التخرج
+                                    </div>
+                                <input class="date-own form-control" name="graduation_date"
+                                       placeholder="تاريخ التخرج"   value="{{employee.graduation_date}}"
+                                       type="text">
+                            </div>
+                            <div class="form-group col-lg-4 col-sm-12">
+                                 <div class="form-group col-lg-12 col-sm-12">
+                                     الكلية / المعهد / المدرسة
+                                    </div>
+                                <input type="text" class="form-control"
+                                       value="{{employee.qualification_name}}"
+                                       name="qualification_name"
+                                       id="exampleInputEmail8" placeholder="الكلية / المعهد / المدرسة">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- general form elements -->
+                <div class="card bg-gradient-primary">
+
+                    <div class="card-header">
+
+
+                        <!-- tools card -->
+                        <div class="card-tools">
+                            <!-- button with a dropdown -->
+                            <button type="button" class="btn btn-primary btn-sm" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+                        <h3 class="card-title" style="text-align: center;">
+                            بيانات العمل
+                        </h3>
+                        <!-- /. tools -->
+                    </div>
+                    <div class="card-body" dir="rtl">
+                        <div class="row">
+                            <div class="form-group col-lg-4 col-sm-12">
+                                 <div class="form-group col-lg-12 col-sm-12">
+                                      كود البصمة
+                                    </div>
+                                <input type="text" class="form-control"
+                                       name="fingerprint" id="fingerprint" value="{{employee.fingerprint}}"
+                                       placeholder="كود البصمة"/>
+                            </div>
+                            <div class="form-group col-lg-4 col-sm-12">
+                                <div class="form-group col-lg-12 col-sm-12">
+                                    الإدارة
+                                    </div>
+                                <select class="form-control select2"
+                                        name="department">
+                                    {% set department = "" %}
+                                    {% for depart in departments%}
+                                    {% if employee.department == depart.id %}
+                                    {% set department =  depart.name %}
+                                    {% endif%}
+                                    {% endfor%}
+                                    <option selected="selected"  value="{{employee.department}}">{{department}}</option>
+                                    {% for department in departments%}
+                                    {% if employee.department == department.id %}
+                                    {% else%}
+                                    <option value="{{department.id}}">{{department.name}}</option>
+                                    {% endif%}
+                                    {% endfor%}
+                                </select>
+                            </div>
+                            <div class="form-group col-lg-4 col-sm-12">
+                                 <div class="form-group col-lg-12 col-sm-12">
+                                    الوظيفة
+                                    </div>
+                                <select class="form-control select2"
+                                        name="job">
+                                    {% set job = "" %}
+                                    {% for jo in jobs%}
+                                    {% if employee.job == jo.id %}
+                                    {% set job =  jo.name %}
+                                    {% endif%}
+                                    {% endfor%}
+                                    <option selected="selected"  value="{{employee.job}}">{{job}}</option>
+                                    {% for job in jobs%}
+                                    {% if employee.job == job.id %}
+                                    {% else%}
+                                    <option value="{{job.id}}">{{job.name}}</option>
+                                    {% endif%}
+                                    {% endfor%}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-lg-4 col-sm-12">
+                                <label>موقع العمل</label>
+                                <select class="form-control select2"
+                                        name="work_place">
+                                       {% set work_place = "" %}
+                                    {% for work_pl in work_places%}
+                                    {% if employee.work_place == work_pl.id %}
+                                    {% set work_place =  work_pl.name %}
+                                    {% endif%}
+                                    {% endfor%}
+                                    <option selected="selected"  value="{{employee.work_place}}">{{work_place}}</option>
+                                    {% for work_place in work_places%}
+                                    {% if employee.work_place == work_place.id %}
+                                    {% else%}
+                                    <option value="{{work_place.id}}">{{work_place.name}}</option>
+                                    {% endif%}
+                                    {% endfor%}
+                                </select>
+                            </div>
+                             <div class="form-group col-lg-4 col-sm-12">
+                                <label>موقف العمل</label>
+                                <select class="form-control select2"
+                                        name="job_status">
+                                      {% set job_status = "" %}
+                                    {% for job_stat in job_statuss%}
+                                    {% if employee.job_status == job_stat.id %}
+                                    {% set job_status =  job_stat.name %}
+                                    {% endif%}
+                                    {% endfor%}
+                                    <option selected="selected"  value="{{employee.job_status}}">{{job_status}}</option>
+                                    {% for job_status in job_statuss%}
+                                    {% if employee.job_status == job_status.id %}
+                                    {% else%}
+                                    <option value="{{job_status.id}}">{{job_status.name}}</option>
+                                    {% endif%}
+                                    {% endfor%}
+                                </select>
+                            </div>
+                            <div class="form-group col-lg-4 col-sm-12">
+                                <label>تاريخ التعيين</label>
+                                <div>
+                                    <input type="text" readonly placeholder="{{employee.date_of_hiring}}"
+                                           name="date_of_hiring" id="datepicker2"  value=""/>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+                <div class="card bg-gradient-light">
+
+                    <div class="card-header bg-gradient-primary">
+
+
+                        <!-- tools card -->
+                        <div class="card-tools">
+                            <!-- button with a dropdown -->
+                            <button type="button" class="btn btn-primary btn-sm" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+                        <h3 class="card-title" style="text-align: center;">
+                            المرفقات الوظيفية
+                        </h3>
+                        <!-- /. tools -->
+                    </div>
+                    <div class="card-body" dir="rtl" id="files">
+                        <div class="row">
+                            <div class="form-group col-lg-4 col-sm-12">
+                                <label>السيرة الذاتية</label>
+                                <div class="custom-file">
+                                    <input type="file"  name="cv" class="custom-file-input" id="customFile">
+                                    <label class="custom-file-label" for="customFile">إضافة ملف</label>
+                                    <a class="../{{employee.cv}}" href="#files"
+                                       id="1"  onclick="clickOn(this.id)"
+                                       ><li class="fa fa-download"></li></a>
+
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-4 col-sm-12">
+                                <label>طلب الإلتحاق</label>
+                                <div class="custom-file">
+                                    <input type="file" name="job_application" class="custom-file-input" id="customFile">
+                                    <label class="custom-file-label" for="customFile">إضافة ملف</label>
+                                    <a  href="#files"  id="2" onclick="clickOn(this.id)"
+                                        class="../{{employee.job_application}}" ><li class="fa fa-download"></li></a>
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-4 col-sm-12">
+                                <label>البطاقة الشخصية</label>
+                                <div class="custom-file">
+                                    <input type="file"  name="identification_card" class="custom-file-input" id="customFile">
+                                    <label class="custom-file-label" for="customFile">إضافة ملف</label>
+                                    <a  href="#files" id="3" onclick="clickOn(this.id)"
+                                       class="../{{employee.identification_card}}" ><li class="fa fa-download"></li></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-lg-4 col-sm-12">
+                                <label>شهادة الميلاد</label>
+                                <div class="custom-file">
+                                    <input type="file" name="birth_certificate" class="custom-file-input" id="customFile">
+                                    <label class="custom-file-label" for="customFile">إضافة ملف</label>
+                                </div>
+                                <a   href="#files"  id="4" onclick="clickOn(this.id)"
+                                    class="../{{employee.birth_certificate}}" ><li class="fa fa-download"></li></a>
+                            </div>
+                            <div class="form-group col-lg-4 col-sm-12">
+                                <label>شهادة المؤهل الدراسي</label>
+                                <div class="custom-file">
+                                    <input type="file" name="qualification_certificate" class="custom-file-input" id="customFile">
+                                    <label class="custom-file-label" for="customFile">إضافة ملف</label>
+                                    <a  href="#files" id="5" onclick="clickOn(this.id)"
+                                        class="../{{employee.qualification_certificate}}" ><li class="fa fa-download"></li></a>
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-4 col-sm-12">
+                                <label>شهادة الجيش</label>
+                                <div class="custom-file">
+                                    <input type="file" name="army_certificate" class="custom-file-input" id="customFile">
+                                    <label class="custom-file-label" for="customFile">إضافة ملف</label>
+                                    <a   href="#files"  id="6" onclick="clickOn(this.id)"
+                                        class="../{{employee.army_certificate}}" ><li class="fa fa-download"></li></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-lg-4 col-sm-12">
+                                <label>صحيفة الحالة الجنائية</label>
+                                <div class="custom-file">
+                                    <input type="file" name="criminal_sheet" class="custom-file-input" id="customFile">
+                                    <label class="custom-file-label" for="customFile">إضافة ملف</label>
+                                    <a  href="#files"  id="7" onclick="clickOn(this.id)"
+                                        class="../{{employee.criminal_sheet}}" ><li class="fa fa-download"></li></a>
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-4 col-sm-12">
+                                <label>سجل تدريب</label>
+                                <div class="custom-file">
+                                    <input type="file" name="training_record" class="custom-file-input" id="customFile">
+                                    <label class="custom-file-label" for="customFile">إضافة ملف</label>
+                                    <a  href="#files"  id="8" onclick="clickOn(this.id)"
+                                        class="../{{employee.training_record}}" ><li class="fa fa-download"></li></a>
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-4 col-sm-12">
+                                <label>رخصة قيادة</label>
+                                <div class="custom-file">
+                                    <input type="file" name="driving_license" class="custom-file-input" id="customFile">
+                                    <label class="custom-file-label" for="customFile">إضافة ملف</label>
+                                    <a  href="#files"  id="9" onclick="clickOn(this.id)"
+                                        class="../{{employee.driving_license}}" ><li class="fa fa-download"></li></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-lg-4 col-sm-12">
+                                <label>رخصة معدة</label>
+                                <div class="custom-file">
+                                    <input type="file" name="equipment_license" class="custom-file-input" id="customFile">
+                                    <label class="custom-file-label" for="customFile">إضافة ملف</label>
+                                    <a  href="#files" id="10" onclick="clickOn(this.id)"
+                                        class="../{{employee.equipment_license}}" ><li class="fa fa-download"></li></a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+                <!-- Form Element sizes -->
+
+                <!-- /.card -->
+
+                <div class="form-group col-lg-12 col-sm-12">
+                    <input type="submit" id="save" class="btn btn-primary" value="حفظ البيانات">
+                </div>
+            </div><!-- /.container-fluid -->
+        </form>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+{% endblock %}
+{% block footer %}
+<script>
+        var form = document.getElementById("myForm");
+            document.getElementById("save").addEventListener("click", function () {
+                form.submit();
+            });
+    $("#employees").last().addClass("active");
+    $("#employee").last().addClass("active");
+    $("#employee_report").last().addClass("active");
+</script>
+<script>
+    function clickOn(id) {
+        let x1 = document.getElementById(id).className;
+        const n = x1.includes("employees");
+
+        if (n){
+            window.open(x1, '_blank');
+        }
+        else {
+            createAlert('', 'لا يوجد ملف', '', 'danger', true, true, 'pageMessages');
+            return false;
+        }
+    }
+    function validateForm() {
+
+        const x1 = document.forms["myForm"]["personal_photo"].value;
+        const x2 = document.forms["myForm"]["name"].value;
+        const x3 = document.forms["myForm"]["residence_governorate"].value;
+        const x4 = document.forms["myForm"]["residence_city"].value;
+        const x5 = document.forms["myForm"]["residence_street"].value;
+        const x6 = document.forms["myForm"]["telephone"].value;
+        const x7 = document.forms["myForm"]["identification_id"].value;
+        const x8 = document.forms["myForm"]["place_of_birth_governorate"].value;
+        const x9 = document.forms["myForm"]["place_of_birth_city"].value;
+        const x10 = document.forms["myForm"]["place_of_birth_street"].value;
+        const x11 = document.forms["myForm"]["date_of_birth"].value;
+        const x12 = document.forms["myForm"]["army_status"].value;
+        const x13 = document.forms["myForm"]["marital_status"].value;
+        const x14 = document.forms["myForm"]["qualification_type"].value;
+        const x15 = document.forms["myForm"]["department"].value;
+        const x16 = document.forms["myForm"]["job"].value;
+        const x17 = document.forms["myForm"]["work_place"].value;
+        const x18 = document.forms["myForm"]["date_of_hiring"].value;
+        const x19 = document.forms["myForm"]["cv"].value;
+        const x20 = document.forms["myForm"]["job_application"].value;
+        const x21 = document.forms["myForm"]["identification_card"].value;
+        const x22 = document.forms["myForm"]["birth_certificate"].value;
+        const x23 = document.forms["myForm"]["qualification_certificate"].value;
+        const x24 = document.forms["myForm"]["army_certificate"].value;
+        const x25 = document.forms["myForm"]["criminal_sheet"].value;
+        const x26 = document.forms["myForm"]["training_record"].value;
+        const x27 = document.forms["myForm"]["driving_license"].value;
+        const x28 = document.forms["myForm"]["equipment_license"].value;
+
+
+        const imgExtension = ['jpg', 'jpeg', 'png'];
+        const fileExtension = ['jpg', 'jpeg', 'png', 'doc', 'docx', 'xml', 'xmlx', 'ppt', 'ppts', 'pdf'];
+
+        const image = x1.slice((x1.lastIndexOf(".") - 1 >>> 0) + 2);
+        const cv = x19.slice((x19.lastIndexOf(".") - 1 >>> 0) + 2);
+        const job_application = x20.slice((x20.lastIndexOf(".") - 1 >>> 0) + 2);
+        const identification_card = x21.slice((x21.lastIndexOf(".") - 1 >>> 0) + 2);
+        const birth_certificate = x22.slice((x22.lastIndexOf(".") - 1 >>> 0) + 2);
+        const qualification_certificate = x23.slice((x23.lastIndexOf(".") - 1 >>> 0) + 2);
+        const army_certificate = x24.slice((x24.lastIndexOf(".") - 1 >>> 0) + 2);
+        const criminal_sheet = x25.slice((x25.lastIndexOf(".") - 1 >>> 0) + 2);
+        const training_record = x26.slice((x26.lastIndexOf(".") - 1 >>> 0) + 2);
+        const driving_license = x27.slice((x27.lastIndexOf(".") - 1 >>> 0) + 2);
+        const equipment_license = x28.slice((x28.lastIndexOf(".") - 1 >>> 0) + 2);
+
+        if (x19 == "" || x19 == null){
+            }else {
+            if (!fileExtension.includes(cv)) {
+                createAlert('', 'صيغة  السيرة الذاتية  غير مدعومة', '', 'danger', true, true, 'pageMessages');
+                return false;
+            }
+        }
+        if (x20 == "" || x20 == null){
+        }else {
+            if (!fileExtension.includes(job_application)) {
+                createAlert('', 'صيغة   طلب الالتحاق  غير مدعومة', '', 'danger', true, true, 'pageMessages');
+                return false;
+            }
+        }
+        if (x21 == "" || x21 == null){
+        }else {
+            if (!fileExtension.includes(identification_card)) {
+                createAlert('', 'صيغة  البطاقة  الشخصية   غير مدعومة', '', 'danger', true, true, 'pageMessages');
+                return false;
+            }
+        }
+        if (x22 == "" || x22 == null){
+        }else {
+            if (!fileExtension.includes(birth_certificate)) {
+                createAlert('', 'صيغة  شهادة الميلاد غير مدعومة', '', 'danger', true, true, 'pageMessages');
+                return false;
+            }
+        }
+        if (x23 == "" || x23 == null){
+        }else {
+            if (!fileExtension.includes(qualification_certificate)) {
+                createAlert('', 'صيغة  شهادة المؤهل الدراسي غير مدعومة', '', 'danger', true, true, 'pageMessages');
+                return false;
+            }
+        }
+        if (x24 == "" || x24 == null){
+        }else {
+            if (!fileExtension.includes(army_certificate)) {
+                createAlert('', 'صيغة  شهادة الجيش غير مدعومة', '', 'danger', true, true, 'pageMessages');
+                return false;
+            }
+        }
+        if (x25 == "" || x25 == null){
+        }else {
+            if (!fileExtension.includes(criminal_sheet)) {
+                createAlert('', 'صيغة  صحيفة الحالة الجنائية  غير مدعومة', '', 'danger', true, true, 'pageMessages');
+                return false;
+            }
+        }
+        if (x26 == "" || x26 == null){
+        }else {
+            if (!fileExtension.includes(training_record)) {
+                createAlert('', 'صيغة    سجل  تدريب  غير مدعومة', '', 'danger', true, true, 'pageMessages');
+                return false;
+            }
+        }
+        if (x27 == "" || x27 == null){
+        }else {
+            if (!fileExtension.includes(driving_license)) {
+                createAlert('', 'صيغة    رخصة قيادة   غير مدعومة', '', 'danger', true, true, 'pageMessages');
+                return false;
+            }
+        }
+        if (x28 == "" || x28 == null){
+        }else {
+            if (!fileExtension.includes(equipment_license)) {
+                createAlert('', 'صيغة    رخصة معدة  غير مدعومة', '', 'danger', true, true, 'pageMessages');
+                return false;
+            }
+        }
+
+
+
+         if (x1 == "" || x1 == null ) {
+        }
+        else {
+            if (!imgExtension.includes(image)) {
+                createAlert('', 'صيغة  الصورة الشخصية غير مدعومة', '', 'danger', true, true, 'pageMessages');
+                document.forms["myForm"]["personal_photo"].focus();
+                return false;
+            }
+        }
+
+        if (x2 == "" || x2 == null) {
+            createAlert('','ادخل الاسم','','danger',true,true,'pageMessages');
+            document.forms["myForm"]["name"].focus();
+            return false;
+        }
+        if (x3 == "" || x3 == null) {
+            createAlert('','ادخل المحافظة للعنوان','','danger',true,true,'pageMessages');
+            document.forms["myForm"]["residence_governorate"].focus();
+            return false;
+        }
+        if (x4 == "" || x4 == null) {
+            createAlert('','ادخل المدينة / المركز للعنوان','','danger',true,true,'pageMessages');
+            document.forms["myForm"]["residence_city"].focus();
+            return false;
+        }
+        if (x5 == "" || x5 == null) {
+            createAlert('','ادخل الشارع / الحي / القرية للعنوان','','danger',true,true,'pageMessages');
+            document.forms["myForm"]["residence_street"].focus();
+            return false;
+        }
+        if (x6 == "" || x6 == null || x6.match(/^\d+$/) == null || x6.length != 11 ){
+            createAlert('','ادخل رقم التليفون بشكل صحيح','','danger',true,true,'pageMessages');
+            document.forms["myForm"]["telephone"].focus();
+            return false;
+        }
+        if (x7 == "" || x7 == null || x7.match(/^\d+$/) == null || x7.length != 14) {
+            createAlert('','ادخل الرقم القومي بشكل صحيح','','danger',true,true,'pageMessages');
+            document.forms["myForm"]["identification_id"].focus();
+            return false;
+        }
+        if (x8 == "" || x8 == null) {
+            createAlert('','ادخل المحافظة لمحل الميلاد','','danger',true,true,'pageMessages');
+            document.forms["myForm"]["place_of_birth_governorate"].focus();
+            return false;
+        }
+        if (x9 == "" || x9 == null) {
+            createAlert('','ادخل المدينة / المركز لمحل الميلاد','','danger',true,true,'pageMessages');
+            document.forms["myForm"]["place_of_birth_city"].focus();
+            return false;
+        }
+        if (x10 == "" || x10 == null) {
+            createAlert('','ادخل الشارع / الحي / القرية لمحل الميلاد','','danger',true,true,'pageMessages');
+            document.forms["myForm"]["place_of_birth_street"].focus();
+            return false;
+        }
+        
+        if (x12 == "" || x12 == null) {
+            createAlert('','ادخل الموقف من التجنيد','','danger',true,true,'pageMessages');
+            document.forms["myForm"]["army_status"].focus();
+            return false;
+        }
+        if (x13 == "" || x13 == null) {
+            createAlert('','ادخل الحالة الاجتماعية','','danger',true,true,'pageMessages');
+            document.forms["myForm"]["marital_status"].focus();
+            return false;
+        }
+        if (x14 == "" || x14 == null) {
+            createAlert('','ادخل نوع المؤهل','','danger',true,true,'pageMessages');
+            document.forms["myForm"]["qualification_type"].focus();
+            return false;
+        }
+        if (x15 == "" || x15 == null) {
+            createAlert('','ادخل  الإدارة','','danger',true,true,'pageMessages');
+            document.forms["myForm"]["department"].focus();
+            return false;
+        }
+        if (x16 == "" || x16 == null) {
+            createAlert('','ادخل  الوظيفة ','','danger',true,true,'pageMessages');
+            document.forms["myForm"]["job"].focus();
+            return false;
+        }
+        if (x17 == "" || x17 == null) {
+            createAlert('','ادخل موقع العمل ','','danger',true,true,'pageMessages');
+            document.forms["myForm"]["work_place"].focus();
+            return false;
+        }
+        
+    }
+
+
+</script>
+<script>
+    function readFile(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                var htmlPreview =
+                    '<img width="200" src="' +
+                    e.target.result +
+                    '" />' +
+                    "<p>" +
+                    input.files[0].name +
+                    "</p>";
+                var wrapperZone = $(input).parent();
+                var previewZone = $(input).parent().parent().find(".preview-zone");
+                var boxZone = $(input)
+                    .parent()
+                    .parent()
+                    .find(".preview-zone")
+                    .find(".box")
+                    .find(".box-body");
+
+                wrapperZone.removeClass("dragover");
+                previewZone.removeClass("hidden");
+                boxZone.empty();
+                boxZone.append(htmlPreview);
+                document.getElementById("dropzone-wrapper").style.display = "none";
+
+
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function reset(e) {
+        e.wrap("<form>").closest("form").get(0).reset();
+        e.unwrap();
+    }
+
+    $(".dropzone").change(function () {
+        readFile(this);
+    });
+
+    $(".dropzone-wrapper").on("dragover", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        $(this).addClass("dragover");
+    });
+
+    $(".dropzone-wrapper").on("dragleave", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        $(this).removeClass("dragover");
+    });
+
+    $(".remove-preview").on("click", function () {
+        var boxZone = $(this).parents(".preview-zone").find(".box-body");
+        var previewZone = $(this).parents(".preview-zone");
+        var dropzone = $(this).parents(".form-group").find(".dropzone");
+        boxZone.empty();
+        previewZone.addClass("hidden");
+        reset(dropzone);
+        document.getElementById("dropzone-wrapper").style.display = "block";
+    });
+
+</script>
+<script>
+    $(document).ready(function () {
+        let name  = document.getElementById('name').value;
+        let identification_id  = document.getElementById('identification_id').value;
+        let fingerprint  = document.getElementById('fingerprint').value;
+        let orderBy  = document.getElementById('orderBy').value;
+        $('#myForm').validate({
+            rules: {
+                identification_id:{
+                    remote: '../Account/ValidateEdit?data&'+identification_id
+                },
+                fingerprint:{
+                    remote: '../Account/ValidateEdit?data&'+fingerprint
+                },
+                orderBy:{
+                    remote: '../Account/ValidateEdit?data&'+orderBy
+                }
+            },
+            messages: {
+                identification_id:{
+                    remote: 'الرقم القومي موجود بالفعل'
+                },
+                fingerprint:{
+                    remote: 'البصمة  موجودة بالفعل'
+                },
+                orderBy:{
+                    remote: 'الترتيب موجود بالفعل'
+                }
+            }
+        });
+    });
+</script>
+<script>
+
+</script>
+
+{% endblock %}

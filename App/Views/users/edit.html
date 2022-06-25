@@ -1,0 +1,1169 @@
+{% extends "dash_base.php" %}
+
+{% block title %}تعديل حساب{% endblock %}
+{% block footer %}
+<script src="../js/hideShowPassword.min.js"></script>
+<script src="../js/app.js"></script>
+
+<script>
+    $(document).ready(function () {
+        let name  = document.getElementById('name').value;
+        let email  = document.getElementById('email').value;
+        $('#Signup_form').validate({
+            rules: {
+                name: {
+                    required: true,
+                    minlength: 3,
+                   // remote: '../Account/ValidateEditUser?users&'+name
+                },
+                email: {
+                    required: true,
+                    email: true,
+                    remote: '../Account/ValidateEditUser?users&'+email
+                },
+                password: {
+                    minlength: 6,
+                    validPassword: true
+                }
+            },
+            messages: {
+                name: {
+                    required:'ادخل الاسم',
+                    remote: 'الاسم موجود بالفعل ',
+                    minlength: 'يجب ان يتكون الاسم  من 3 حروف على الاقل'
+                },
+                personal_photo: {
+                    required: 'ادخل الصورة',
+                },
+                email: {
+                    remote: 'الإيميل موجود بالفعل ',
+                    required:'ادخل  البريد الإلكتروني',
+                    email:''
+                },
+                password: {
+                    minlength: 'يجب ان تتكون كلمة المرور من 6 حروف للى الاقل'
+
+                }
+            }
+        });
+    });
+
+</script>
+
+{% endblock %}
+{% block print %}
+<style>
+    table.dataTable th  {
+        background-color: rgb(57, 131, 212);
+        color: white;
+        font-size: larger;
+        border: 1px solid black;
+    }
+</style>
+{% endblock %}
+{% block body %}
+
+{% if user.errors is not empty %}
+<p>الأخطاء :</p>
+<ul>
+    {% for error in  user.errors %}
+    <li>{{ error }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item active">تعديل حساب</li>
+                        <li class="breadcrumb-item">الأدمن</li>
+                        <li class="breadcrumb-item"><a href="../Dashboard/index">الرئيسية</a></li>
+
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content" dir="ltr">
+        <form method="post" enctype="multipart/form-data" autocomplete="off"  id="Signup_form"
+              action="editUser">
+            <div class="container-fluid">
+                <!-- left column -->
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="card bg-gradient-primary">
+                            <div class="card-header">
+
+
+                                <!-- tools card -->
+                                <div class="card-tools">
+                                    <!-- button with a dropdown -->
+                                    <button type="button" class="btn btn-primary btn-sm" data-card-widget="collapse">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+
+                                </div>
+                                <!-- /.card-header -->
+                                <!-- form start -->
+                                <h3 class="card-title" style="text-align: center;">
+                                    الصورة الشخصية
+                                </h3>
+                                <!-- /. tools -->
+                            </div>
+                            <div class="card-body" dir="rtl">
+                                <div class="row">
+                                    <div class="form-group col-lg-12 col-sm-12">
+                                        <div class="form-group">
+                                            <div class="preview-zone hidden">
+                                                <div class="box box-solid">
+                                                    <div class="box-header with-border" style="background-color: transparent;">
+                                                        <div class="box-tools pull-right">
+                                                            <button type="button" class="btn btn-danger btn-xs remove-preview">
+                                                                <i class="fa fa-times"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="box-body"></div>
+                                                </div>
+                                            </div>
+
+                                            <div class="dropzone-wrapper" id="dropzone-wrapper" dir="ltr">
+                                                <input type="file" style="text-align: center;" name="personal_photo"
+                                                       accept="image/*" class="dropzone /">
+                                                <div class="dropzone-desc">
+                                                    <i class="glyphicon glyphicon-download-alt"></i>
+                                                    <p>اختر الصورة الشخصية</p>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <a href="../{{user.personal_photo}}" target="_blank" class="btn btn-warning"
+                                            ><li class="fas fa-download"></li></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-lg-9">
+                        <!-- general form elements -->
+                        <div class="card bg-gradient-primary">
+
+                            <div class="card-header">
+
+
+                                <!-- tools card -->
+                                <div class="card-tools">
+                                    <!-- button with a dropdown -->
+                                    <button type="button" class="btn btn-primary btn-sm" data-card-widget="collapse">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+
+                                </div>
+                                <!-- /.card-header -->
+                                <!-- form start -->
+                                <h3 class="card-title" style="text-align: center;">
+                                    بيانات الحساب
+                                </h3>
+                                <!-- /. tools -->
+                            </div>
+                            <div class="card-body" dir="rtl">
+                                <div class="row">
+                                    <div class="form-group col-lg-6 col-sm-12">
+                                        اسم المستخدم
+                                        <br>
+                                        <input  name="id" type="hidden" class="form-control"   value="{{user.id}}"/>
+
+                                        <input id="name" name="name" type="text" class="form-control"   value="{{ user.name }}"/>
+                                    </div>
+
+                                    <div class="form-group col-lg-6 col-sm-12">
+                                        عنوان البريد الإلكتروني
+                                        <br>
+                                        <input id="email" type="email" name="email" class="form-control" value="{{ user.email }}"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-lg-6 col-sm-12">
+                                        كلمة المرور
+                                        <br>
+                                        <input id="password" type="password" class="form-control" name="password" data-type="password"/>
+                                        <button id="toggle" type="button" class="btn btn-warning">اظهر</button>
+                                    </div>
+                                    <div class="form-group col-lg-6 col-sm-12">
+                                    <label>نوع الحساب</label>
+                                    <select class="form-control select2"
+                                            name="auth">
+                                        {% set auth = "" %}
+                                        {% for type in user_types%}
+                                        {% if user.auth == type.id %}
+                                        {% set auth =  type.name %}
+                                        {% endif%}
+                                        {% endfor%}
+                                        <option selected="selected"    value="{{user.auth}}">{{auth}}</option>
+                                        {% for type in user_types%}
+                                        <option value="{{type.id}}">{{type.name}}</option>
+                                        {% endfor%}
+                                    </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                    </div>
+                </div>
+                        <!-- general form elements -->
+                        <div class="card bg-gradient-purple collapsed-card">
+
+                            <div class="card-header">
+
+
+                                <!-- tools card -->
+                                <div class="card-tools">
+                                    <!-- button with a dropdown -->
+                                    <button type="button" class="btn btn-primary btn-sm" data-card-widget="collapse">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+
+                                </div>
+                                <!-- /.card-header -->
+                                <!-- form start -->
+                                <h3 class="card-title" style="text-align: center;">
+                                   صلاحيات الحساب العادي
+                                </h3>
+                                <!-- /. tools -->
+                            </div>
+                            <div class="card-body" dir="rtl">
+                                {% for companyPermission in permission%}
+
+                                {% set company_ar ='' %}
+                                {% set name_short ='' %}
+                                {% set checked ='' %}
+                                {% set checked_s ='' %}
+                                {% for company in companies%}
+                                {% if companyPermission.company_id == company.id %}
+                                {% set company_ar =company.name_ar %}
+                                {% set name_short =company.name_short %}
+                                {% endif %}
+                                {% if companyPermission.company_id == company.id and companyPermission.permission == 1  %}
+                                {% set checked = 'checked' %}
+                                {% endif %}
+                                {% endfor %}
+
+
+                                <div class="form-group col-lg-12 col-sm-12">
+                                    {{company_ar}}
+                                        <input type="checkbox" name="{{name_short}}" class="form-control"  {{checked}} value="{{companyPermission.company_id}}"/>
+                                        <table id="example2" class="btn-light" dir="rtl">
+                                            <tr>
+                                                <th>القسم</th>
+                                                <th>View</th>
+                                                <th>Read</th>
+                                                <th>Add</th>
+                                                <th>Edit</th>
+                                                <th>Delete</th>
+                                                <th>Profile</th>
+                                            </tr>
+                                               <tr>
+                                                <th>الإحصائيات</th>
+                                                {% if companyPermission.st =='1'  %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                
+                                                 <input type="hidden" name="st{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="st{{loop.index}}" class="form-control" {{checked_s}}   value="1"/></td>
+                                                
+                                              <td><input type="checkbox" class="form-control"  disabled/></td>
+
+                                            <td><input type="checkbox" class="form-control"  disabled/></td>
+                                            <td><input type="checkbox" class="form-control"  disabled/></td>
+                                            <td><input type="checkbox" class="form-control"  disabled/></td>
+                                            <td><input type="checkbox" class="form-control"  disabled/></td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <th>طلبات الإلتحاق</th>
+                                                {% if '1' in companyPermission.ja   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="jaV{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="jaV{{loop.index}}" class="form-control" {{checked_s}}   value="1"/></td>
+
+                                                {% if '2' in companyPermission.ja   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="jaR{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="jaR{{loop.index}}" class="form-control"  {{checked_s}} value="2"/></td>
+                                                {% if '3' in companyPermission.ja   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="jaA{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="jaA{{loop.index}}" class="form-control"  {{checked_s}} value="3"/></td>
+                                                {% if '4' in companyPermission.ja   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="jaE{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="jaE{{loop.index}}" class="form-control" {{checked_s}}  value="4"/></td>
+                                                {% if '5' in companyPermission.ja   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="jaD{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="jaD{{loop.index}}" class="form-control" {{checked_s}}  value="5"/></td>
+                                                {% if '6' in companyPermission.ja   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="jaP{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="jaP{{loop.index}}" class="form-control" {{checked_s}}  value="6"/></td>
+                                            </tr>
+                                            <tr>
+                                                <th>الموظفيين</th>
+                                                {% if '1' in companyPermission.em   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="emV{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="emV{{loop.index}}" class="form-control" {{checked_s}}   value="1"/></td>
+
+                                                {% if '2' in companyPermission.em   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="emR{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="emR{{loop.index}}" class="form-control" {{checked_s}}   value="2"/></td>
+
+                                                {% if '3' in companyPermission.em   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="emA{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="emA{{loop.index}}" class="form-control" {{checked_s}}   value="3"/></td>
+
+                                                {% if '4' in companyPermission.em   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="emE{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="emE{{loop.index}}" class="form-control" {{checked_s}}   value="4"/></td>
+
+                                                {% if '5' in companyPermission.em   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="emD{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="emD{{loop.index}}" class="form-control" {{checked_s}}   value="5"/></td>
+
+                                                {% if '6' in companyPermission.em   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="emP{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="emP{{loop.index}}" class="form-control" {{checked_s}}   value="6"/></td>
+                                            </tr>
+                                            <tr>
+                                                <th>الإدارات</th>
+                                                {% if '1' in companyPermission.de   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="deV{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="deV{{loop.index}}" class="form-control" {{checked_s}}   value="1"/></td>
+
+                                                {% if '2' in companyPermission.de   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="deR{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="deR{{loop.index}}" class="form-control" {{checked_s}}   value="2"/></td>
+
+                                                {% if '3' in companyPermission.de   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="deA{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="deA{{loop.index}}" class="form-control" {{checked_s}}   value="3"/></td>
+
+                                                {% if '4' in companyPermission.de   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="deE{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="deE{{loop.index}}" class="form-control" {{checked_s}}   value="4"/></td>
+
+                                                {% if '5' in companyPermission.de   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="deD{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="deD{{loop.index}}" class="form-control" {{checked_s}}   value="5"/></td>
+
+                                                {% if '6' in companyPermission.de   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="deP{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="deP{{loop.index}}" class="form-control" {{checked_s}}   value="6"/></td>
+
+                                            </tr>
+                                            <tr>
+                                                <th>الوظائف</th>
+                                                {% if '1' in companyPermission.jo   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="joV{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="joV{{loop.index}}" class="form-control" {{checked_s}}   value="1"/></td>
+
+                                                {% if '2' in companyPermission.jo   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="joR{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="joR{{loop.index}}" class="form-control" {{checked_s}}   value="2"/></td>
+
+                                                {% if '3' in companyPermission.jo   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="joA{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="joA{{loop.index}}" class="form-control" {{checked_s}}   value="3"/></td>
+
+                                                {% if '4' in companyPermission.jo   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="joE{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="joE{{loop.index}}" class="form-control" {{checked_s}}   value="4"/></td>
+
+                                                {% if '5' in companyPermission.jo   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="joD{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="joD{{loop.index}}" class="form-control" {{checked_s}}   value="5"/></td>
+
+                                                {% if '6' in companyPermission.jo   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="joP{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="joP{{loop.index}}" class="form-control" {{checked_s}}   value="6"/></td>
+
+                                            </tr>
+                                            <tr>
+                                                <th>مواقع الغمل</th>
+                                                {% if '1' in companyPermission.wp   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="wpV{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="wpV{{loop.index}}" class="form-control" {{checked_s}}   value="1"/></td>
+
+                                                {% if '2' in companyPermission.wp   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="wpR{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="wpR{{loop.index}}" class="form-control" {{checked_s}}   value="2"/></td>
+
+                                                {% if '3' in companyPermission.wp   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="wpA{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="wpA{{loop.index}}" class="form-control" {{checked_s}}   value="3"/></td>
+
+                                                {% if '4' in companyPermission.wp   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="wpE{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="wpE{{loop.index}}" class="form-control" {{checked_s}}   value="4"/></td>
+
+                                                {% if '5' in companyPermission.wp   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="wpD{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="wpD{{loop.index}}" class="form-control" {{checked_s}}   value="5"/></td>
+
+                                                {% if '6' in companyPermission.wp   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="wpP{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="wpP{{loop.index}}" class="form-control" {{checked_s}}   value="6"/></td>
+
+                                            </tr>
+                                            <tr>
+                                                <th>التأمينات</th>
+                                                {% if '1' in companyPermission.ins   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="insV{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="insV{{loop.index}}" class="form-control" {{checked_s}}   value="1"/></td>
+
+                                                {% if '2' in companyPermission.ins   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="insR{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="insR{{loop.index}}" class="form-control" {{checked_s}}   value="2"/></td>
+
+                                                {% if '3' in companyPermission.ins   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="insA{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="insA{{loop.index}}" class="form-control" {{checked_s}}   value="3"/></td>
+
+                                                {% if '4' in companyPermission.ins   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="insE{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="insE{{loop.index}}" class="form-control" {{checked_s}}   value="4"/></td>
+
+                                                {% if '5' in companyPermission.ins   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="insD{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="insD{{loop.index}}" class="form-control" {{checked_s}}   value="5"/></td>
+
+                                                {% if '6' in companyPermission.ins   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="insP{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="insP{{loop.index}}" class="form-control" {{checked_s}}   value="6"/></td>
+
+                                            </tr>
+                                            <tr>
+                                                <th>الأجازات</th>
+                                                {% if '1' in companyPermission.ho   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="hoV{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="hoV{{loop.index}}" class="form-control" {{checked_s}}   value="1"/></td>
+
+                                                {% if '2' in companyPermission.ho   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="hoR{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="hoR{{loop.index}}" class="form-control" {{checked_s}}   value="2"/></td>
+
+                                                {% if '3' in companyPermission.ho   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="hoA{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="hoA{{loop.index}}" class="form-control" {{checked_s}}   value="3"/></td>
+
+                                                {% if '4' in companyPermission.ho   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="hoE{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="hoE{{loop.index}}" class="form-control" {{checked_s}}   value="4"/></td>
+
+                                                {% if '5' in companyPermission.ho   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="hoD{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="hoD{{loop.index}}" class="form-control" {{checked_s}}   value="5"/></td>
+
+                                                {% if '6' in companyPermission.ho   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="hoP{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="hoP{{loop.index}}" class="form-control" {{checked_s}}   value="6"/></td>
+
+
+                                            </tr>
+                                            <tr>
+                                                <th>إنقطاع عن العمل</th>
+                                                {% if '1' in companyPermission.dr   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="drV{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="drV{{loop.index}}" class="form-control" {{checked_s}}   value="1"/></td>
+
+                                                {% if '2' in companyPermission.dr   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="drR{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="drR{{loop.index}}" class="form-control" {{checked_s}}   value="2"/></td>
+
+                                                {% if '3' in companyPermission.dr   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="drA{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="drA{{loop.index}}" class="form-control" {{checked_s}}   value="3"/></td>
+
+                                                {% if '4' in companyPermission.dr   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="drE{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="drE{{loop.index}}" class="form-control" {{checked_s}}   value="4"/></td>
+
+                                                {% if '5' in companyPermission.dr   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="drD{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="drD{{loop.index}}" class="form-control" {{checked_s}}   value="5"/></td>
+
+                                                {% if '6' in companyPermission.dr   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="drP{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="drP{{loop.index}}" class="form-control" {{checked_s}}   value="6"/></td>
+
+                                            </tr>
+                                            <tr>
+                                                <th>الجزاءات</th>
+                                                {% if '1' in companyPermission.pe   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="peV{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="peV{{loop.index}}" class="form-control" {{checked_s}}   value="1"/></td>
+
+                                                {% if '2' in companyPermission.pe   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="peR{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="peR{{loop.index}}" class="form-control" {{checked_s}}   value="2"/></td>
+
+                                                {% if '3' in companyPermission.pe   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="peA{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="peA{{loop.index}}" class="form-control" {{checked_s}}   value="3"/></td>
+
+                                                {% if '4' in companyPermission.pe   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="peE{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="peE{{loop.index}}" class="form-control" {{checked_s}}   value="4"/></td>
+
+                                                {% if '5' in companyPermission.pe   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="peD{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="peD{{loop.index}}" class="form-control" {{checked_s}}   value="5"/></td>
+
+                                                {% if '6' in companyPermission.pe   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="peP{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="peP{{loop.index}}" class="form-control" {{checked_s}}   value="6"/></td>
+
+                                            </tr>
+                                            <tr>
+                                                <th>إخلاء طرف</th>
+                                                {% if '1' in companyPermission.di   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="diV{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="diV{{loop.index}}" class="form-control" {{checked_s}}   value="1"/></td>
+
+                                                {% if '2' in companyPermission.di   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="diR{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="diR{{loop.index}}" class="form-control" {{checked_s}}   value="2"/></td>
+
+                                                {% if '3' in companyPermission.di   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="diA{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="diA{{loop.index}}" class="form-control" {{checked_s}}   value="3"/></td>
+
+                                                {% if '4' in companyPermission.di   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="diE{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="diE{{loop.index}}" class="form-control" {{checked_s}}   value="4"/></td>
+
+                                                {% if '5' in companyPermission.di   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="diD{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="diD{{loop.index}}" class="form-control" {{checked_s}}   value="5"/></td>
+
+                                                {% if '6' in companyPermission.di   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="diP{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="diP{{loop.index}}" class="form-control" {{checked_s}}   value="6"/></td>
+
+                                            </tr>
+                                            <tr>
+                                                <th>البصمة</th>
+                                                {% if '1' in companyPermission.fp   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="fpV{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="fpV{{loop.index}}" class="form-control" {{checked_s}}   value="1"/></td>
+
+                                                {% if '2' in companyPermission.fp   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="fpR{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="fpR{{loop.index}}" class="form-control" {{checked_s}}   value="2"/></td>
+
+                                                <td><input type="checkbox" class="form-control"  disabled/></td>
+                                                <td><input type="checkbox" class="form-control" disabled/></td>
+                                                <td><input type="checkbox" class="form-control" disabled/></td>
+
+                                                {% if '6' in companyPermission.fp   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="fpP{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="fpP{{loop.index}}" class="form-control" {{checked_s}}   value="6"/></td>
+
+                                            </tr>
+                                            <tr>
+                                                <th>الرواتب والأجور</th>
+                                                {% if '1' in companyPermission.sa   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="saV{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="saV{{loop.index}}" class="form-control" {{checked_s}}   value="1"/></td>
+
+                                                {% if '2' in companyPermission.sa   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="saR{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="saR{{loop.index}}" class="form-control" {{checked_s}}   value="2"/></td>
+
+                                                {% if '3' in companyPermission.sa   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="saA{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="saA{{loop.index}}" class="form-control" {{checked_s}}   value="3"/></td>
+
+                                                {% if '4' in companyPermission.sa   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="saE{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="saE{{loop.index}}" class="form-control" {{checked_s}}   value="4"/></td>
+
+                                                {% if '5' in companyPermission.sa   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="saD{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="saD{{loop.index}}" class="form-control" {{checked_s}}   value="5"/></td>
+
+                                                {% if '6' in companyPermission.sa   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="saP{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="saP{{loop.index}}" class="form-control" {{checked_s}}   value="6"/></td>
+                                            </tr>
+                                            <tr>
+                                                <th>النماذج</th>
+                                                {% if '1' in companyPermission.te   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="teV{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="teV{{loop.index}}" class="form-control" {{checked_s}}   value="1"/></td>
+
+                                                {% if '2' in companyPermission.te   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="teR{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="teR{{loop.index}}" class="form-control" {{checked_s}}   value="2"/></td>
+
+                                                {% if '3' in companyPermission.te   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="teA{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="teA{{loop.index}}" class="form-control" {{checked_s}}   value="3"/></td>
+
+                                                {% if '4' in companyPermission.te   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="teE{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="teE{{loop.index}}" class="form-control" {{checked_s}}   value="4"/></td>
+
+                                                {% if '5' in companyPermission.te   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="teD{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="teD{{loop.index}}" class="form-control" {{checked_s}}   value="5"/></td>
+
+                                                {% if '6' in companyPermission.te   %}
+                                                {% set checked_s = 'checked' %}
+                                                {% else %}
+                                                {% set checked_s = '' %}
+                                                {% endif %}
+                                                <input type="hidden" name="teP{{loop.index}}" value=0>
+                                                <td><input type="checkbox" name="teP{{loop.index}}" class="form-control" {{checked_s}}   value="6"/></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+
+                                    {% endfor%}
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                <!-- /.card -->
+
+                <div class="col-lg-12">
+                    <!-- general form elements -->
+                    <div class="card bg-gradient-purple collapsed-card">
+
+                        <div class="card-header">
+
+
+                            <!-- tools card -->
+                            <div class="card-tools">
+                                <!-- button with a dropdown -->
+                                <button type="button" class="btn btn-primary btn-sm" data-card-widget="collapse">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+
+                            </div>
+                            <!-- /.card-header -->
+                            <!-- form start -->
+                            <h3 class="card-title" style="text-align: center;">
+                                صلاحيات مسئول  الإدارة
+                            </h3>
+                            <!-- /. tools -->
+                        </div>
+                        <div class="card-body" dir="rtl">
+                            <div class="row">
+                                <div class="col-12">
+                                    <select class="form-control select2"
+                                            name="department">
+                                        <option selected="selected"   disabled value="">الإدارات</option>
+                                        {% for company in companies%}
+                                        <option    disabled value="">{{company.name_ar}}</option>
+                                        {% for department in departments%}
+                                        {% if department.company == company.id%}}
+                                        <option value="{{department.id}}">{{department.name}}</option>
+                                        {% endif%}}
+                                        {% endfor%}
+                                        {% endfor%}
+                                    </select>
+                                    <table id="example2" class="  table-striped btn-light" dir="rtl">
+                                        <thead>
+                                        <tr style="background-color: #0b2e13;text-align: center;">
+                                            <th>م</th>
+                                            <th>اسم الإدارة</th>
+                                            <th>اسم الشركة</th>
+                                            <th>الأدوات</th>
+                                        </tr>
+                                        </thead>
+
+
+
+                                        <tbody>
+                                        {% for department in department_permission%}
+                                        <tr style="color: black;text-align: center;">
+                                            <td>{{loop.index}}</td>
+                                            {% set department_name ='' %}
+                                            {% set company_name ='' %}
+                                            {% for depart in departments %}
+                                            {% if depart.id == department.department_id%}
+                                            {% set department_name =depart.name%}
+                                            {% endif%}
+                                            {% for company in companies%}
+                                            {% if company.id == depart.company%}
+                                            {% set company_name =company.name_ar%}
+                                            {% endif%}
+                                            {% endfor%}
+                                            {% endfor%}
+                                            <td>{{department_name}}</td>
+                                            <td>{{company_name}}</td>
+                                            <td>
+                                                {% if users.auth != 'الأدمن' %}
+                                                &nbsp;<a class="../Admin/deleteDepartment?{{department.id}}"
+                                                         coords="{{department_name}}"
+                                                         href="#"  id="{{loop.index}}" onclick="getId(this.id)"><i class="fas fa-trash-alt"></i></a>
+                                                {% endif %}
+                                            </td>
+                                            {% endfor%}
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+                <div class="form-group col-lg-12 col-sm-12">
+                    <button id="save" class="btn btn-primary">حفظ البيانات</button>
+                </div>
+            </div>
+            </div><!-- /.container-fluid -->
+        </form>
+    </section>
+    <!-- /.content -->
+</div>
+<script>
+    var form = document.getElementById("Signup_form");
+        document.getElementById("save").addEventListener("click", function () {
+            form.submit();
+        });
+
+    function getId(id) {
+        alert(a7a)
+        let name = document.getElementById(id).coords;
+        $.confirm({
+            title: 'هل أنت متأكد من حذف  صلاحية إدارة   ' + name,
+            content: '',
+            rtl: true,
+            type: 'red',
+            closeIcon: true,
+            buttons: {
+                confirm: {
+                    text: 'حذف ',
+                    btnClass: 'btn-danger',
+                    action: function () {
+                        window.location.href = document.getElementById(id).className;
+                    }
+                },
+                cancel: {
+                    text: 'إلغاء',
+                    btnClass: 'btn-blue'
+                }
+            }
+        })
+    }
+
+    $("#admin").last().addClass("active");
+    $("#admin_report").last().addClass("active");
+
+    $( document ).ready(function() {
+        $(".btn-light").addClass('dataTable');
+    });
+
+
+</script>
+<script>
+    function readFile(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                var htmlPreview =
+                    '<img width="200" src="' +
+                    e.target.result +
+                    '" />' +
+                    "<p>" +
+                    input.files[0].name +
+                    "</p>";
+                var wrapperZone = $(input).parent();
+                var previewZone = $(input).parent().parent().find(".preview-zone");
+                var boxZone = $(input)
+                    .parent()
+                    .parent()
+                    .find(".preview-zone")
+                    .find(".box")
+                    .find(".box-body");
+
+                wrapperZone.removeClass("dragover");
+                previewZone.removeClass("hidden");
+                boxZone.empty();
+                boxZone.append(htmlPreview);
+                document.getElementById("dropzone-wrapper").style.display = "none";
+
+
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function reset(e) {
+        e.wrap("<form>").closest("form").get(0).reset();
+        e.unwrap();
+    }
+
+    $(".dropzone").change(function () {
+        readFile(this);
+    });
+
+    $(".dropzone-wrapper").on("dragover", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        $(this).addClass("dragover");
+    });
+
+    $(".dropzone-wrapper").on("dragleave", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        $(this).removeClass("dragover");
+    });
+
+    $(".remove-preview").on("click", function () {
+        var boxZone = $(this).parents(".preview-zone").find(".box-body");
+        var previewZone = $(this).parents(".preview-zone");
+        var dropzone = $(this).parents(".form-group").find(".dropzone");
+        boxZone.empty();
+        previewZone.addClass("hidden");
+        reset(dropzone);
+        document.getElementById("dropzone-wrapper").style.display = "block";
+    });
+    $(function () {
+        var table = $('#example2').DataTable({
+            paging: false,
+            lengthChange: false,
+            searching: false,
+            fixedColumns: false,
+            ordering: false,
+            autoWidth: false,
+            responsive: false,
+            select: false,
+            AutoFill: false,
+            lengthMenu: false,
+            colReorder: {
+                realtime: false
+            },
+            language: {
+                "infoEmpty": "",
+                "info": "",
+
+            }
+        });
+    });
+
+
+
+</script>
+
+
+
+
+{% endblock %}
+

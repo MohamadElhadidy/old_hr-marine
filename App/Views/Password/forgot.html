@@ -1,0 +1,32 @@
+{% extends "base.php" %}
+
+{% block title %}نسيت كلمة المرور{% endblock %}
+{% block style %}
+<link rel="stylesheet" href="../css/form.css">
+{% endblock %}
+{% block body %}
+
+<form action="request-reset" autocomplete="on" method="post">
+    <div class="login-wrap">
+        <div class="login-html">
+            <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">هل نسيت كلمة المرور</label>
+            <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab"></label>
+            <div class="login-form">
+                <div class="sign-in-htm">
+                    <div class="group">
+                        <label for="email" class="label">عنوان البريد الإلكتروني</label>
+                        <input id="email" type="email" name="email"  class="input" value="{{ email }}"/>
+                    </div>
+                    <div class="group">
+                        <input type="submit" class="button" value="ارسل اعادة ظبط كلمة المرور">
+                    </div>
+                    <div class="hr"></div>
+                    <div class="foot-lnk">
+                        <a href="/requests_sys/public/Login/new"> سجل الدخول</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}

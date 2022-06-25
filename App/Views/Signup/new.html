@@ -1,0 +1,281 @@
+{% extends "dash_base.php" %}
+
+{% block title %}إنشاء حساب{% endblock %}
+{% block footer %}
+<script src="../js/hideShowPassword.min.js"></script>
+<script src="../js/app.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#Signup_form').validate({
+            rules: {
+                name: {
+                required: true,
+                minlength: 3
+               // validName: true
+                  },
+                personal_photo: {
+                    required: true,
+                },
+                email: {
+                    required: true,
+                    email: true,
+                    remote: '../Account/ValidateEmail'
+                },
+                password: {
+                    required: true,
+                    minlength: 6,
+                    validPassword: true
+                }
+            },
+                messages: {
+                name: {
+                    required:'ادخل الاسم',
+                    minlength: 'يجب ان يتكون الاسم  من 3 حروف على الاقل'
+                },
+                    personal_photo: {
+                        required: 'ادخل الصورة',
+                    },
+                    email: {
+                        remote: 'الإيميل موجود بالفعل ',
+                        required:'ادخل  البريد الإلكتروني',
+                        email:''
+                    },
+                    password: {
+                        required:'ادخل كلمة المرور',
+                        minlength: 'يجب ان تتكون كلمة المرور من 6 حروف للى الاقل'
+
+                    }
+                }
+        });
+    });
+
+</script>
+{% endblock %}
+{% block body %}
+
+{% if user.errors is not empty %}
+<p>الأخطاء :</p>
+<ul>
+    {% for error in  user.errors %}
+    <li>{{ error }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item active">إنشاء حساب</li>
+                        <li class="breadcrumb-item">الأدمن</li>
+                        <li class="breadcrumb-item"><a href="../Dashboard/index">الرئيسية</a></li>
+
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content" dir="ltr">
+        <form method="post" enctype="multipart/form-data" autocomplete="off"  id="Signup_form"
+              action="../Signup/create">
+            <div class="container-fluid">
+                <!-- left column -->
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="card bg-gradient-primary">
+                            <div class="card-header">
+
+
+                                <!-- tools card -->
+                                <div class="card-tools">
+                                    <!-- button with a dropdown -->
+                                    <button type="button" class="btn btn-primary btn-sm" data-card-widget="collapse">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+
+                                </div>
+                                <!-- /.card-header -->
+                                <!-- form start -->
+                                <h3 class="card-title" style="text-align: center;">
+                                    الصورة الشخصية
+                                </h3>
+                                <!-- /. tools -->
+                            </div>
+                            <div class="card-body" dir="rtl">
+                                <div class="row">
+                                    <div class="form-group col-lg-12 col-sm-12">
+                                        <div class="form-group">
+                                            <div class="preview-zone hidden">
+                                                <div class="box box-solid">
+                                                    <div class="box-header with-border" style="background-color: transparent;">
+                                                        <div class="box-tools pull-right">
+                                                            <button type="button" class="btn btn-danger btn-xs remove-preview">
+                                                                <i class="fa fa-times"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="box-body"></div>
+                                                </div>
+                                            </div>
+
+                                            <div class="dropzone-wrapper" id="dropzone-wrapper" dir="ltr">
+                                                <input type="file" style="text-align: center;" name="personal_photo"
+                                                       accept="image/*" class="dropzone /">
+                                                <div class="dropzone-desc">
+                                                    <i class="glyphicon glyphicon-download-alt"></i>
+                                                    <p>اختر الصورة الشخصية</p>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-lg-9">
+                        <!-- general form elements -->
+                        <div class="card bg-gradient-primary">
+
+                            <div class="card-header">
+
+
+                                <!-- tools card -->
+                                <div class="card-tools">
+                                    <!-- button with a dropdown -->
+                                    <button type="button" class="btn btn-primary btn-sm" data-card-widget="collapse">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+
+                                </div>
+                                <!-- /.card-header -->
+                                <!-- form start -->
+                                <h3 class="card-title" style="text-align: center;">
+                                    بيانات الحساب
+                                </h3>
+                                <!-- /. tools -->
+                            </div>
+                            <div class="card-body" dir="rtl">
+                                <div class="row">
+                                    <div class="form-group col-lg-6 col-sm-12">
+                                        اسم المستخدم
+                                        <br>
+                                        <input id="name" name="name" type="text" class="form-control"   value="{{ user.name }}"/>
+                                    </div>
+
+                                    <div class="form-group col-lg-6 col-sm-12">
+                                       عنوان البريد الإلكتروني
+                                        <br>
+                                        <input id="email" type="email" name="email" class="form-control" value="{{ user.email }}"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-lg-6 col-sm-12">
+                                        كلمة المرور
+                                        <br>
+                                        <input id="password" type="password" class="form-control" name="password" data-type="password"/>
+                                        <button id="toggle" type="button" class="btn btn-warning">اظهر</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card -->
+
+                <div class="form-group col-lg-12 col-sm-12">
+                    <input type="submit" id="save" class="btn btn-primary" value="حفظ البيانات">
+                </div>
+            </div><!-- /.container-fluid -->
+        </form>
+    </section>
+    <!-- /.content -->
+</div>
+<script>
+        var form = document.getElementById("Signup_form");
+            document.getElementById("save").addEventListener("click", function () {
+                form.submit();
+            });
+    $("#admin").last().addClass("active");
+    $("#admin_new").last().addClass("active");
+</script>
+<script>
+    function readFile(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                var htmlPreview =
+                    '<img width="200" src="' +
+                    e.target.result +
+                    '" />' +
+                    "<p>" +
+                    input.files[0].name +
+                    "</p>";
+                var wrapperZone = $(input).parent();
+                var previewZone = $(input).parent().parent().find(".preview-zone");
+                var boxZone = $(input)
+                    .parent()
+                    .parent()
+                    .find(".preview-zone")
+                    .find(".box")
+                    .find(".box-body");
+
+                wrapperZone.removeClass("dragover");
+                previewZone.removeClass("hidden");
+                boxZone.empty();
+                boxZone.append(htmlPreview);
+                document.getElementById("dropzone-wrapper").style.display = "none";
+
+
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function reset(e) {
+        e.wrap("<form>").closest("form").get(0).reset();
+        e.unwrap();
+    }
+
+    $(".dropzone").change(function () {
+        readFile(this);
+    });
+
+    $(".dropzone-wrapper").on("dragover", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        $(this).addClass("dragover");
+    });
+
+    $(".dropzone-wrapper").on("dragleave", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        $(this).removeClass("dragover");
+    });
+
+    $(".remove-preview").on("click", function () {
+        var boxZone = $(this).parents(".preview-zone").find(".box-body");
+        var previewZone = $(this).parents(".preview-zone");
+        var dropzone = $(this).parents(".form-group").find(".dropzone");
+        boxZone.empty();
+        previewZone.addClass("hidden");
+        reset(dropzone);
+        document.getElementById("dropzone-wrapper").style.display = "block";
+    });
+
+</script>
+
+
+{% endblock %}

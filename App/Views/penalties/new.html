@@ -1,0 +1,213 @@
+{% extends "dash_base.php" %}
+
+{% block title %}
+إضافة جزاء
+{% endblock %}
+{% block style %}
+{% endblock %}
+
+{% block body %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item active">إضافة جزاء</li>
+                        <li class="breadcrumb-item">الجزاءات</li>
+                        <li class="breadcrumb-item"><a href="../Dashboard/index">الرئيسية</a></li>
+
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content" dir="">
+        <form method="post" enctype="multipart/form-data" autocomplete="off" id="myForm" name="myForm" onsubmit="return validateForm()"
+              action="savePenalty">
+            <div class="container-fluid">
+                <!-- left column -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <!-- general form elements -->
+                        <div class="card bg-gradient-primary">
+
+                            <div class="card-header">
+
+
+                                <!-- tools card -->
+                                <div class="card-tools">
+                                    <!-- button with a dropdown -->
+                                    <button type="button" class="btn btn-primary btn-sm" data-card-widget="collapse">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+
+                                </div>
+                                <!-- /.card-header -->
+                                <!-- form start -->
+                                <h3 class="card-title" style="text-align: center;">
+                                    بيانات الجزاء
+                                </h3>
+                                <!-- /. tools -->
+                            </div>
+                            <div class="card-body" dir="rtl">
+                                <div class="row">
+                                    <div class="form-group col-lg-6 col-sm-12">
+                                        <select class="form-control select2"
+                                                name="employee">
+                                            <option selected="selected" disabled  value="">اسم الموظف</option>
+                                            {% for employee in employees%}
+                                            <option value="{{employee.id}}">{{employee.name}}</option>
+                                            {% endfor%}
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-lg-6 col-sm-12">
+                                        <select class="form-control select2"
+                                                name="type">
+                                            <option selected="selected" disabled  value="">نوع الجزاء</option>
+                                            {% for penalty_type in penaltyType%}
+                                            <option value="{{penalty_type.id}}">{{penalty_type.name}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-lg-6 col-sm-12">
+                                        <input type="text" class="form-control"
+                                               name="cause"   placeholder="سبب الجزاء"/>
+                                    </div>
+                                    <div class="form-group col-lg-6 col-sm-12">
+                                        <input class="date-own form-control" id="datepicker" name="date"
+                                               placeholder="تاريخ الجزاء" readonly type="text">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-lg-6 col-sm-12">
+                                        <input type="text" class="form-control"
+                                               name="response"   placeholder="الإجراء المتخذ"/>
+                                    </div>
+                                    <div class="form-group col-lg-6 col-sm-12">
+                                        <input type="text" class="form-control"
+                                               name="notes"   placeholder="الملاحظات"/>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                    </div>
+                </div>
+                <div class="card bg-gradient-primary">
+
+                    <div class="card-header">
+
+
+                        <!-- tools card -->
+                        <div class="card-tools">
+                            <!-- button with a dropdown -->
+                            <button type="button" class="btn btn-primary btn-sm" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+                        <h3 class="card-title" style="text-align: center;">
+                            المرفقات
+                        </h3>
+                        <!-- /. tools -->
+                    </div>
+                    <div class="card-body" dir="rtl">
+                        <div class="row">
+                            <div class="form-group col-lg-12 col-sm-12">
+                                <label>مستند   الجزاء</label>
+                                <div class="custom-file">
+                                    <input type="file"  name="file" class="custom-file-input" id="customFile">
+                                    <label class="custom-file-label" for="customFile">إضافة ملف</label>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+                <!-- /.card -->
+
+                <div class="form-group col-lg-12 col-sm-12">
+                    <input type="submit" id="save" class="btn btn-primary" value="حفظ البيانات">
+                </div>
+            </div><!-- /.container-fluid -->
+        </form>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+{% endblock %}
+{% block footer %}
+
+<script>
+
+    function validateForm() {
+
+        const x1 = document.forms["myForm"]["employee"].value;
+        const x2 = document.forms["myForm"]["cause"].value;
+        const x3 = document.forms["myForm"]["date"].value;
+        const x4 = document.forms["myForm"]["file"].value;
+        const x5 = document.forms["myForm"]["type"].value;
+        const x6 = document.forms["myForm"]["response"].value;
+
+        const fileExtension = ['jpg', 'jpeg', 'png', 'doc', 'docx', 'xml', 'xmlx', 'ppt', 'ppts', 'pdf'];
+
+        const file = x4.slice((x4.lastIndexOf(".") - 1 >>> 0) + 2);
+
+
+
+        if (x1 == "" || x1 == null ) {
+            createAlert('','ادخل اسم الموظف','','danger',true,true,'pageMessages');
+            document.forms["myForm"]["employee"].focus();
+            return false;
+        }
+        if (x5== "" || x5 == null) {
+            createAlert('','ادخل نوع الجزاء   ','','danger',true,true,'pageMessages');
+            document.forms["myForm"]["type"].focus();
+            return false;
+        }
+        if (x2== "" || x2 == null) {
+            createAlert('','ادخل سبب الجزاء   ','','danger',true,true,'pageMessages');
+            document.forms["myForm"]["cause"].focus();
+            return false;
+        }
+        if (x3== "" || x3 == null) {
+            createAlert('','ادخل تاريخ الجزاء   ','','danger',true,true,'pageMessages');
+            document.forms["myForm"]["date"].focus();
+            return false;
+        }
+        if (x6== "" || x6 == null) {
+            createAlert('','ادخل  الإجراء المتخذ   ','','danger',true,true,'pageMessages');
+            document.forms["myForm"]["response"].focus();
+            return false;
+        }
+        if (x4== "" || x4 == null) {
+            createAlert('','ادخل مستند الجزاء   ','','danger',true,true,'pageMessages');
+            document.forms["myForm"]["file"].focus();
+            return false;
+        }
+        else if(!fileExtension.includes(file)){
+            createAlert('', 'صيغة    مستند الجزاء  غير مدعومة', '', 'danger', true, true, 'pageMessages');
+            return false;
+        }
+    }
+</script>
+<script>
+    $("#penalties").last().addClass("active");
+    $("#penalties_new").last().addClass("active");
+</script>
+
+{% endblock %}

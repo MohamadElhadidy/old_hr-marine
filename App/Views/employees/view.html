@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="../index_style/images/favicon.png" rel="icon">
+	 <script src="../assets/plugins/jquery/jquery.min.js"></script>
+    <title>{{data.name}}</title>
+    <style>
+	
+        :root {
+            --color-gray-light-1: #f8f8f8;
+            --color-gray-light-2: #e9e9e9;
+            --color-gray-light-3: #dedede;
+            --color-gray-dark-1: #545454;
+            --color-gray-dark-2: #737373;
+            --color-gray-dark-3: #9a9a9a;
+            --color-blue-dark-1: #00387f;
+            --color-tiffany: #00a6a6;
+            --profile-theme: #4682bf;
+            --timeline-circle-theme: #14253e;
+
+            --pgbar-length: 100%;
+
+            --MATH-PI: 3.1415px;
+            --percent: 100;
+        }
+
+        html {
+            font-size: 100%;
+            font-family: Lateef, serif;
+            font-weight: bolder;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-weight: bolder;
+        }
+
+        body {
+
+            margin: 0;
+            min-height: 100vh;
+            background-color: #ffff;
+            font-family: Lateef, serif;@
+            font-weight: bolder;
+        }
+
+        .wrapper {
+            margin: 0 auto;
+            max-width: 70rem;
+            background-color: var(--color-gray-light-2);
+            display: flex;
+            box-shadow: 0px 0px 15px 4px #b3b3b3;
+            border: 5px solid black;
+
+        }
+
+
+
+        .link a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .link span::after {
+            position: absolute;
+            content: "";
+            left: 50%;
+            bottom: -3px;
+            width: 0;
+            height: 2px;
+            background-color: var(--profile-theme);
+            transition: width 0.3s;
+            /*transition-timing-function: cubic-bezier(.64,.51,.16,.86);*/
+            transition-timing-function: cubic-bezier(0.92, 0.57, 0.33, 1.02);
+            transform: translate(-50%, 0);
+        }
+
+
+
+        /* Detail section overall setting*/
+        .detail {
+            flex: 1 0 0;
+            background-color: white;
+            padding: 2rem;
+        }
+
+        .detail-section {
+            transition: all 0.3s;
+        }
+        .detail-section {
+            direction: rtl;
+        }
+        .detail-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: -3rem;
+            margin-top: -1.5rem;
+        }
+        .detail-section > .detail-content {
+            padding: 1.5rem;
+            padding-left: 2rem;
+            user-select: none;
+        }
+        .detail-section.edu > .detail-content {
+            padding-left: calc(1.5rem + 10px);
+        }
+        .title-icon + span {
+            font-size: 1.5rem;
+            transition: all 0.3s;
+        }
+        .title-icon {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            padding: .5rem;
+            margin-right: 0rem;
+            width: .5rem;
+            height: .5rem;
+            background-color: var(--profile-theme);
+            border-radius: 50%;
+        /* transition: all 0.3s;*/
+            }
+            .title-icon i {
+                color: white;
+                line-height: 1rem;
+                font-size: 1rem;
+                text-align: center;
+            }
+
+
+            /* time line block in education section */
+        .timeline-block {
+            position: relative;
+            padding-left: 30px;
+        }
+        .timeline-block:not(:last-of-type) {
+            margin-bottom: 1rem;
+        }
+        .timeline-block h1 {
+            font-size: 1rem;
+            margin: 5px 0;
+            transition: all 0.3s;
+        }
+        .timeline-block p {
+            font-size: 0.8rem;
+            margin: 5px 0;
+        }
+        .timeline-block time {
+            font-size: 0.8rem;
+            color: var(--color-gray-dark-2);
+        }
+
+
+        /* Programming skills section */
+        .pg-list,
+        .tool-list,
+        .favor-list {
+            padding: 0;
+            list-style: none;
+        }
+        .pg-list > li {
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+        }
+        .sb-skeleton {
+            position: relative;
+            flex: 1 0 auto;
+            height: 2px;
+            background-color: var(--color-gray-dark-3);
+        }
+        .pg-list > li > span {
+            flex: 0 0 90px;
+            font-size: large;
+        }
+        .sb-skeleton > .skillbar {
+            position: absolute;
+            left: 0;
+            top: -1px;
+            width: var(--pgbar-length);
+            height: 4px;
+            background-color: var(--profile-theme);
+        }
+        .tool-list {
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+        }
+
+
+        .favor-list > li > i {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 40px;
+            width: 50px;
+            height: 50px;
+        }
+
+        .favor-list > li > span {
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 1024px) {
+            html {
+                font-size: 90%;
+            }
+            .wrapper {
+                flex-direction: column;
+            }
+            .intro,
+            .detail {
+                flex: 0 0 100%;
+                box-shadow: none;
+            }
+            .detail {
+                direction: rtl;
+            }
+
+            .intro-section {
+                padding: 0 2rem;
+            }
+            .profile {
+                margin-bottom: 1rem;
+            }
+            .profile::after {
+                display: none;
+            }
+            .photo img {
+                width: 100px;
+                height: 100px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            html {
+                font-size: 80%;
+            }
+            .tool-list {
+                flex-wrap: wrap;
+            }
+            .tool-list > li {
+                flex: 0 0 33.33%;
+            }
+            .favor-list > li {
+                flex: 0 0 33.3333%;
+            }
+        }
+        @media (max-width: 500px) {
+            html {
+                font-size: 70%;
+            }
+        }
+        #photo{
+            border:black solid 3px;
+            width: 150px;
+            height:210px;
+            float: left;
+        }
+        #background{
+            top: 100%;
+            left: 20%;
+            position:absolute;
+            width: 300px;
+        }
+        @media print {
+            #photo{
+                width: 150px;
+            }
+            #background{
+                width: 200px;
+                top: 60%;
+            }
+        }
+
+        span,h1,h3{
+        font-weight: bolder;
+            text-decoration: underline;
+
+        }
+        table tr td{
+            padding : 15px 30px 2px 30px;
+            font-weight: bolder;
+            font-size: larger;
+        }
+
+    </style>
+	<script>
+	        $(document).ready(function(){
+      
+        function online(view = '1') {
+            $.ajax({
+                url: "../notifications/online",
+                method: "POST",
+                data: {view: view}
+            });
+        }
+
+        setInterval(function(){
+            online();
+        }, 5000);
+        });
+	</script>
+</head>
+<body>
+<div class="wrapper">
+    <div class="detail">
+        <img src="../../public/files/background.png" id="background"   >
+            <h2 style="text-align: center;border: 1px solid black;  text-decoration: none;margin-top: -1%;"  >{{company.name_ar}} <br> {{company.name_en}}</h2>
+
+        <div class="detail-section edu">
+            <div class="detail-title">
+               <h1>البيانات الشخصية :- </h1>
+
+            </div>
+            <div class="detail-content">
+                <img src="../{{data.personal_photo}}" id="photo">
+
+                  <table>
+                      <tr>
+                          <td>الاسم</td>
+                          <td>:</td>
+                          <td>{{data.name}}</td>
+                      </tr>
+                      <tr>
+                          <td>الرقم القومي</td>
+                          <td>:</td>
+                          <td>{{data.identification_id}}</td>
+                      </tr>
+                      <tr>
+                          <td>رقم التليفون</td>
+                          <td>:</td>
+                          <td>{{data.telephone}}</td>
+                      </tr>
+                      <tr>
+                          <td>العنوان</td>
+                          <td>:</td>
+                          <td>{{data.residence_governorate }} / {{data.residence_city }} / {{data.residence_street }}</td>
+                      </tr>
+                    <!--  <tr>
+                          <td>محل الميلاد</td>
+                          <td>:</td>
+                          <td>{{data.place_of_birth_governorate }} / {{data.place_of_birth_city }} / {{data.place_of_birth_street }}</td>
+                      </tr>  -->
+                      <tr>
+                          <td>تاريخ الميلاد</td>
+                          <td>:</td>
+                          <td>{{data.date_of_birth}}</td>
+                      </tr>
+                      <tr>
+                          <td>الحالة الاجتماعية</td>
+                          <td>:</td>
+                          <td>{{data.marital_status}}</td>
+                      </tr>
+                      <tr>
+                          <td>الموقف من التجنيد</td>
+                          <td>:</td>
+                          <td>{{data.army_status}}</td>
+                      </tr>
+                  </table>
+        </div>
+        </div>
+        <hr>
+
+        <div class="detail-section edu">
+            <div class="detail-title">
+
+                <h1>التعليم : -</h1>
+            </div>
+            <div class="detail-content">
+                <table>
+                    <tr>
+                        <td>نوع المؤهل</td>
+                        <td>:</td>
+                        <td>{{data.qualification_type}}</td>
+                    </tr>
+                    <tr>
+                        <td>سنة التخرج</td>
+                        <td>:</td>
+                        <td>{{data.graduation_date}}</td>
+                    </tr>
+                    <tr>
+                        <td>الكلية / المعهد / المدرسة</td>
+                        <td>:</td>
+                        <td>{{data.qualification_name}}</td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+        <hr>
+        <div class="detail-section edu">
+            <div class="detail-title">
+                <h1>بيانات العمل :- </h1>
+            </div>
+            <div class="detail-content">
+                <table>
+                 <!--    <tr>
+                        <td>كود الموظف</td>
+                        <td>:</td>
+                        <td>{{data.orderBy}}</td>
+                    </tr>  -->
+                    <tr>
+                        <td>كود البصمة</td>
+                        <td>:</td>
+                        <td>{{data.fingerprint}}</td>
+                    </tr>
+                    <tr>
+                        <td>الوظيفة</td>
+                        <td>:</td>
+                        <td>{{data.job}}</td>
+                    </tr>
+                    <tr>
+                        <td>الإدارة</td>
+                        <td>:</td>
+                        <td>{{data.department }}</td>
+                    </tr>
+                    <tr>
+                        <td>موقع العمل</td>
+                        <td>:</td>
+                        <td>{{data.work_place}}</td>
+                    </tr>
+                    <tr>
+                        <td>تاريخ التعيين</td>
+                        <td>:</td>
+                        <td>{{data.date_of_hiring}}</td>
+                    </tr>
+                  <!--  <tr>
+                        <td>التقييم</td>
+                        <td>:</td>
+                        <td>{{data.review}}</td>
+                    </tr>-->
+                   <!--
+                    <tr>
+                        
+                          <td>الموقف من العمل</td>
+                          <td>:</td>
+                          <td>{{data.job_status}}</td>
+                      </tr>        -->
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

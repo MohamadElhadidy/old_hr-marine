@@ -1,0 +1,467 @@
+{% extends "dash_base.php" %}
+
+{% block title %}
+طلب جديد
+{% endblock %}
+{% block style %}
+{% endblock %}
+
+{% block body %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item active">طلب جديد</li>
+                        <li class="breadcrumb-item">طلب التحاق بالعمل</li>
+                        <li class="breadcrumb-item"><a href="../Dashboard/index">الرئيسية</a></li>
+
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content" dir="">
+        <form method="post" enctype="multipart/form-data"  autocomplete="off" id="myForm" name="myForm" onsubmit="return validateForm()"
+              action="saveApplication">
+        <div class="container-fluid">
+                <!-- left column -->
+            <div class="row">
+            <div class="col-lg-3">
+                <div class="card bg-gradient-primary">
+                    <div class="card-header">
+
+
+                        <!-- tools card -->
+                        <div class="card-tools">
+                            <!-- button with a dropdown -->
+                            <button type="button" class="btn btn-primary btn-sm" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+                        <h3 class="card-title" style="text-align: center;">
+                            الصورة الشخصية
+                        </h3>
+                        <!-- /. tools -->
+                    </div>
+                    <div class="card-body" dir="rtl">
+                        <div class="row">
+                            <div class="form-group col-lg-12 col-sm-12">
+                                <div class="form-group">
+                                    <div class="preview-zone hidden">
+                                        <div class="box box-solid">
+                                            <div class="box-header with-border" style="background-color: transparent;">
+                                                <div class="box-tools pull-right">
+                                                    <button type="button" class="btn btn-danger btn-xs remove-preview">
+                                                        <i class="fa fa-times"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="box-body"></div>
+                                        </div>
+                                    </div>
+                                    <div class="dropzone-wrapper" id="dropzone-wrapper">
+                                        <div class="dropzone-desc">
+                                            <i class="glyphicon glyphicon-download-alt"></i>
+                                            <p>اختر الصورة الشخصية</p>
+                                        </div>
+                                        <input type="file" name="personal_photo"
+                                               accept="image/*" class="dropzone /">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+                <div class="col-lg-9">
+                    <!-- general form elements -->
+                    <div class="card bg-gradient-primary">
+
+                    <div class="card-header">
+
+
+                        <!-- tools card -->
+                        <div class="card-tools">
+                            <!-- button with a dropdown -->
+                            <button type="button" class="btn btn-primary btn-sm" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+                        <h3 class="card-title" style="text-align: center;">
+                            البيانات الشخصية
+                        </h3>
+                                <!-- /. tools -->
+                            </div>
+                            <div class="card-body" dir="rtl">
+                                <div class="form-group">
+                                    <input type="text" class="form-control"
+                                           name="name"   placeholder="الاسم"/>
+                                </div>
+                            <div class="row">
+                                <div class="form-group col-lg-12 col-sm-12">
+                                     العنوان
+                                </div>
+                                <div class="form-group col-lg-4 col-sm-12">
+                                        <select class="form-control select2"
+                                                name="residence_governorate"
+                                                id="address" onchange="getCities(this.value,this.id)">
+                                            <option selected="selected" disabled value="">اختر المحافظة</option>
+                                            {% for governorate in governorates%}
+                                            <option value="{{governorate.id}}">{{governorate.governorate_name}}</option>
+                                            {% endfor%}
+                                        </select>
+                                </div>
+                                <div class="form-group col-lg-4 col-sm-12">
+                                    <select class="form-control select2"
+                                            id="cities_address" name="residence_city">
+                                        <option selected="selected" disabled value="">اختر المدينة / المركز</option>
+                                    </select>
+                            </div>
+                                <div class="form-group col-lg-4 col-sm-12">
+                                    <input type="text" class="form-control" name="residence_street"
+                                           id="exampleInputText1"
+                                           placeholder="الحي / الشارع / القرية">
+                                </div>
+                            </div>
+                                <div class="row">
+                                <div class="form-group col-lg-6 col-sm-12">
+                                    <input type="text" class="form-control" name="telephone"
+                                           id="exampleInputText7"
+                                           placeholder="رقم التليفون">
+                                </div>
+                                <div class="form-group col-lg-6 col-sm-12">
+                                    <input type="text" class="form-control" name="identification_id"
+                                           id="exampleInputText6"
+                                           placeholder="الرقم القومي">
+                                </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-lg-12 col-sm-12">
+                                        محل الميلاد
+                                    </div>
+                                    <div class="form-group col-lg-4 col-sm-12">
+                                        <select class="form-control select2" id="place_of_birth"
+                                                name="place_of_birth_governorate"
+                                                onchange="getCities(this.value,this.id)">
+                                            <option selected="selected" disabled value="">اختر المحافظة</option>
+                                            {% for governorate in governorates%}
+                                            <option value="{{governorate.id}}">{{governorate.governorate_name}}</option>
+                                            {% endfor%}
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-lg-4 col-sm-12">
+                                        <select class="form-control select2" name="place_of_birth_city"
+                                                id="place_of_birth_cities">
+                                            <option selected="selected" disabled value="">اختر المدينة / المركز</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-lg-4 col-sm-12">
+                                        <input type="text" class="form-control" name="place_of_birth_street"
+                                               id="exampleInputText4"
+                                               placeholder="الحي / الشارع / القرية">
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-lg-4 col-sm-12">
+                                        <label>تاريخ الميلاد</label>
+                                        <br>
+                                            <input type="text" readonly name="date_of_birth" id="datepicker"  value=""/>
+                                    </div>
+                                    <div class="form-group col-lg-4 col-sm-12">
+                                        <label>الموقف من التجنيد</label>
+                                        <select class="form-control select2"
+                                                name="army_status">
+                                            <option selected="selected" disabled value="">الموقف من التجنيد</option>
+                                            {% for army_status in armyStatus%}
+                                            <option value="{{army_status.id}}">{{army_status.name}}</option>
+                                            {% endfor%}
+
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-lg-4 col-sm-12">
+                                        <label>الحالة الاجتماعية</label>
+                                        <select class="form-control select2"
+                                                name="marital_status">
+                                            <option selected="selected" disabled value="">الحالة الاجتماعية</option>
+                                            {% for marital_status in maritalStatus %}
+                                            <option value="{{marital_status.id}}">{{marital_status.name}}</option>
+                                            {% endfor%}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.card-body -->
+                    </div>
+                </div>
+            </div>
+                    <!-- /.card -->
+
+                    <!-- Form Element sizes -->
+
+                    <!-- /.card -->
+                <div class="card bg-gradient-primary">
+                    <div class="card-header">
+
+
+                        <!-- tools card -->
+                        <div class="card-tools">
+                            <!-- button with a dropdown -->
+                            <button type="button" class="btn btn-primary btn-sm" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+                        <h3 class="card-title" style="text-align: center;">
+                            بيانات التعليم
+                        </h3>
+                        <!-- /. tools -->
+                    </div>
+                    <div class="card-body" dir="rtl">
+                        <div class="row">
+                        <div class="form-group col-lg-4 col-sm-12">
+                            <select class="form-control select2"
+                                    name="qualification_type">
+                                <option selected="selected" disabled value=""> نوع المؤهل</option>
+                                {% for qualification_type in qualificationType %}
+                                <option value="{{qualification_type.id}}">{{qualification_type.name}}</option>
+                                {% endfor%}
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-4 col-sm-12">
+                            <input class="form-control" name="graduation_date"
+                                   placeholder="تاريخ التخرج" type="text">
+                        </div>
+                        <div class="form-group col-lg-4 col-sm-12">
+                            <input type="text" class="form-control"  name="qualification_name"
+                                   id="exampleInputEmail8" placeholder="الكلية / المعهد / المدرسة">
+                        </div>
+                    </div>
+                </div>
+                </div>
+            <div class="form-group col-lg-12 col-sm-12">
+               <input type="submit" id="save" class="btn btn-primary" value="حفظ البيانات">
+            </div>
+        </div><!-- /.container-fluid -->
+        </form>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+{% endblock %}
+{% block footer %}
+
+<script>
+
+    function validateForm() {
+        const x1 = document.forms["myForm"]["personal_photo"].value;
+        const x2 = document.forms["myForm"]["name"].value;
+        const x3 = document.forms["myForm"]["residence_governorate"].value;
+        const x4 = document.forms["myForm"]["residence_city"].value;
+        const x5 = document.forms["myForm"]["residence_street"].value;
+        const x6 = document.forms["myForm"]["telephone"].value;
+        const x7 = document.forms["myForm"]["identification_id"].value;
+        const x8 = document.forms["myForm"]["place_of_birth_governorate"].value;
+        const x9 = document.forms["myForm"]["place_of_birth_city"].value;
+        const x10 = document.forms["myForm"]["place_of_birth_street"].value;
+        const x11 = document.forms["myForm"]["date_of_birth"].value;
+        const x12 = document.forms["myForm"]["army_status"].value;
+        const x13 = document.forms["myForm"]["marital_status"].value;
+        const x14 = document.forms["myForm"]["qualification_type"].value;
+
+        const  image = x1.slice((x1.lastIndexOf(".") - 1 >>> 0) + 2);
+        const imgExtension = ['jpg','jpeg','png'];
+
+
+        if (x1 == "" || x1 == null ) {
+            createAlert('','ادخل الصورة الشخصية','','danger',true,true,'pageMessages');
+            document.forms["myForm"]["personal_photo"].focus();
+            return false;
+        }
+        else if(!imgExtension.includes(image)) {
+            createAlert('','صيغة  الصورة الشخصية غير مدعومة','','danger',true,true,'pageMessages');
+            document.forms["myForm"]["personal_photo"].focus();
+            return false;
+        }
+
+        if (x2 == "" || x2 == null) {
+            createAlert('','ادخل الاسم','','danger',true,true,'pageMessages');
+            document.forms["myForm"]["name"].focus();
+            return false;
+        }
+        if (x3 == "" || x3 == null) {
+            createAlert('','ادخل المحافظة للعنوان','','danger',true,true,'pageMessages');
+            document.forms["myForm"]["residence_governorate"].focus();
+            return false;
+        }
+        if (x4 == "" || x4 == null) {
+            createAlert('','ادخل المدينة / المركز للعنوان','','danger',true,true,'pageMessages');
+            document.forms["myForm"]["residence_city"].focus();
+            return false;
+        }
+        if (x5 == "" || x5 == null) {
+            createAlert('','ادخل الشارع / الحي / القرية للعنوان','','danger',true,true,'pageMessages');
+            document.forms["myForm"]["residence_street"].focus();
+            return false;
+        }
+        if (x6 == "" || x6 == null || x6.match(/^\d+$/) == null || x6.length != 11 ){
+            createAlert('','ادخل رقم التليفون بشكل صحيح','','danger',true,true,'pageMessages');
+            document.forms["myForm"]["telephone"].focus();
+            return false;
+        }
+        if (x7 == "" || x7 == null || x7.match(/^\d+$/) == null || x7.length != 14) {
+            createAlert('','ادخل الرقم القومي بشكل صحيح','','danger',true,true,'pageMessages');
+            document.forms["myForm"]["identification_id"].focus();
+            return false;
+        }
+        if (x8 == "" || x8 == null) {
+            createAlert('','ادخل المحافظة لمحل الميلاد','','danger',true,true,'pageMessages');
+            document.forms["myForm"]["place_of_birth_governorate"].focus();
+            return false;
+        }
+        if (x9 == "" || x9 == null) {
+            createAlert('','ادخل المدينة / المركز لمحل الميلاد','','danger',true,true,'pageMessages');
+            document.forms["myForm"]["place_of_birth_city"].focus();
+            return false;
+        }
+        if (x10 == "" || x10 == null) {
+            createAlert('','ادخل الشارع / الحي / القرية لمحل الميلاد','','danger',true,true,'pageMessages');
+            document.forms["myForm"]["place_of_birth_street"].focus();
+            return false;
+        }
+        if (x11 == "" || x11 == null) {
+            createAlert('','ادخل تاريخ الميلاد','','danger',true,true,'pageMessages');
+            document.forms["myForm"]["date_of_birth"].focus();
+            return false;
+        }
+        if (x12 == "" || x12 == null) {
+            createAlert('','ادخل الموقف من التجنيد','','danger',true,true,'pageMessages');
+            document.forms["myForm"]["army_status"].focus();
+            return false;
+        }
+        if (x13 == "" || x13 == null) {
+            createAlert('','ادخل الحالة الاجتماعية','','danger',true,true,'pageMessages');
+            document.forms["myForm"]["marital_status"].focus();
+            return false;
+        }
+        if (x14 == "" || x14 == null) {
+            createAlert('','ادخل نوع المؤهل','','danger',true,true,'pageMessages');
+            document.forms["myForm"]["qualification_type"].focus();
+            return false;
+        }
+    }
+</script>
+<script>
+    function readFile(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                var htmlPreview =
+                    '<img width="200" src="' +
+                    e.target.result +
+                    '" />' +
+                    "<p>" +
+                    input.files[0].name +
+                    "</p>";
+                var wrapperZone = $(input).parent();
+                var previewZone = $(input).parent().parent().find(".preview-zone");
+                var boxZone = $(input)
+                    .parent()
+                    .parent()
+                    .find(".preview-zone")
+                    .find(".box")
+                    .find(".box-body");
+
+                wrapperZone.removeClass("dragover");
+                previewZone.removeClass("hidden");
+                boxZone.empty();
+                boxZone.append(htmlPreview);
+                document.getElementById("dropzone-wrapper").style.display = "none";
+
+
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function reset(e) {
+        e.wrap("<form>").closest("form").get(0).reset();
+        e.unwrap();
+    }
+
+    $(".dropzone").change(function () {
+        readFile(this);
+    });
+
+    $(".dropzone-wrapper").on("dragover", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        $(this).addClass("dragover");
+    });
+
+    $(".dropzone-wrapper").on("dragleave", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        $(this).removeClass("dragover");
+    });
+
+    $(".remove-preview").on("click", function () {
+        var boxZone = $(this).parents(".preview-zone").find(".box-body");
+        var previewZone = $(this).parents(".preview-zone");
+        var dropzone = $(this).parents(".form-group").find(".dropzone");
+        boxZone.empty();
+        previewZone.addClass("hidden");
+        reset(dropzone);
+        document.getElementById("dropzone-wrapper").style.display = "block";
+    });
+
+</script>
+<script>
+    $(document).ready(function () {
+        $('#myForm').validate({
+            rules: {
+                name: {
+                    remote: '../Account/Validate?job_application'
+                },
+                identification_id:{
+                    remote: '../Account/Validate?job_application',
+                    remote: '../Account/Validate?data'
+                }
+            },
+            messages: {
+                name: {
+                    remote:'الاسم موجود بالفعل'
+                },
+                identification_id:{
+                   remote: 'الرقم القومي موجود',
+                    remote: 'الرقم القومي موجود'
+                }
+                }
+        });
+    });
+</script>
+<script>
+    $("#job_application").last().addClass("active");
+    $("#job_application_new").last().addClass("active");
+</script>
+
+{% endblock %}

@@ -1,0 +1,145 @@
+{% extends "dash_base.php" %}
+
+{% block title %}
+ الإدارة  :    {{department.name}}
+<br>
+{% if department.manager!= '' %}
+مسئول الإدارة  :      {{department.manager}}
+{% endif %}
+{% endblock %}
+{% block style %}
+{% endblock %}
+
+{% block body %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item active">تقرير الموظفين</li>
+                        <li class="breadcrumb-item">الادارات</li>
+                        <li class="breadcrumb-item"><a href="../Dashboard/index">الرئيسية</a></li>
+
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content" >
+        <section class="content">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="card bg-gradient-primary">
+                        <div class="card-header">
+
+
+                            <!-- tools card -->
+                            <div class="card-tools">
+                                <!-- button with a dropdown -->
+                                <button type="button" class="btn btn-primary btn-sm" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+
+                            </div>
+                            <!-- /.card-header -->
+                            <!-- form start -->
+                            <h3 class="card-title" style="text-align: center;">
+                                بيانات  الإدارة
+                            </h3>
+                            <!-- /. tools -->
+                        </div>
+                        <div class="card-body" dir="rtl">
+                            <div class="row">
+                                <div class="form-group col-lg-12 col-sm-12">
+                                    <img src="../files/dep.jpg" width="200px" />
+                                    <div class="form-group">
+                                        اسم الإدارة  :    {{department.name}}
+                                        <br>
+                                        مسئول الإدارة  :      {{department.manager}}
+                                        <br>
+                                        المهام الوظيفية والمسئوليات  :      {{department.tasks}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-lg-9">
+                    <div class="card">
+                        <div class="card-header">
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <table id="example1" class=" table-striped" dir="rtl">
+                                <thead>
+                                <tr>
+                                    <th>م</th>
+                               <!--     <th>كود الموظف</t h>-->
+                                    <th>اسم الموظف</th>
+                                    <th>الوظيفة</th>
+                                    <th>موقع العمل</th>
+                                    <th>تاريخ التعيين</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for emp in data %}
+                                <tr>
+                                    <td>{{loop.index}}</td>
+                                 <!--   <td>{{emp.id}}</td> -->
+                                    <td>{{emp.name}}</td>
+                                    <td>{{emp.job}}</td>
+                                    <td>{{emp.work_place}}</td>
+                                    <td>{{emp.date_of_hiring}}</td>
+                                </tr>
+                                {% endfor%}
+
+
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <th>م</th>
+                                  <!--  <th>كود الموظف</t h>-->
+                                    <th>اسم الموظف</th>
+                                    <th>الوظيفة</th>
+                                    <th>موقع العمل</th>
+                                    <th>تاريخ التعيين</th>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+{% endblock %}
+{% block footer %}
+
+<script>
+    $("#departments").last().addClass("active");
+    $("#departments_report").last().addClass("active");
+</script>
+
+
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/jq-3.3.1/jszip-2.5.0/dt-1.10.20/af-2.3.4/b-1.6.1/b-colvis-1.6.1/b-flash-1.6.1/b-html5-1.6.1/b-print-1.6.1/cr-1.5.2/fc-3.3.0/fh-3.1.6/kt-2.5.1/r-2.2.3/rg-1.1.1/rr-1.2.6/sc-2.0.1/sp-1.0.1/sl-1.3.1/datatables.min.js"></script>
+{% endblock%}

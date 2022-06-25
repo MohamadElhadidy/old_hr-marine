@@ -1,0 +1,187 @@
+{% extends "dash_base.php" %}
+
+{% block title %}
+إنقطاع عن العمل
+{% endblock %}
+{% block style %}
+{% endblock %}
+
+{% block body %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item active">إنقطاع عن العمل</li>
+                        <li class="breadcrumb-item">إنقطاع عن العمل</li>
+                        <li class="breadcrumb-item"><a href="../Dashboard/index">الرئيسية</a></li>
+
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content" dir="">
+        <form method="post" enctype="multipart/form-data" autocomplete="off" id="myForm" name="myForm" onsubmit="return validateForm()"
+              action="EditDrop">
+            <div class="container-fluid">
+                <!-- left column -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <!-- general form elements -->
+                        <div class="card bg-gradient-primary">
+
+                            <div class="card-header">
+
+
+                                <!-- tools card -->
+                                <div class="card-tools">
+                                    <!-- button with a dropdown -->
+                                    <button type="button" class="btn btn-primary btn-sm" data-card-widget="collapse">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+
+                                </div>
+                                <!-- /.card-header -->
+                                <!-- form start -->
+                                <h3 class="card-title" style="text-align: center;">
+                                    بيانات الإنقطاع عن العمل
+                                </h3>
+                                <!-- /. tools -->
+                            </div>
+                            <div class="card-body" dir="rtl">
+                                <div class="row">
+                                    <div class="form-group col-lg-6 col-sm-12">
+                                        <input type ="hidden" value="{{drop.id}}"
+                                               name="id"  />
+                                        {% set employee_name = "" %}
+                                        {% for employee in employees%}
+                                        {% if drop.employee == employee.id %}
+                                        {% set employee_name =  employee.name %}
+                                        {% endif%}
+                                        {% endfor%}
+                                        <input type="text" readonly name="employee" class="form-control" value="{{employee_name}}"
+                                               placeholder="اسم الموظف"/>
+                                    </div>
+                                    <div class="form-group col-lg-6 col-sm-12">
+                                        <input class="date-own form-control" id="datepicker" name="date"
+                                               placeholder="{{drop.date}}"
+                                               
+                                               readonly type="text">
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-lg-6 col-sm-12">
+                                        <input class=" form-control" name="notes"
+                                               placeholder="ملاحظات" value="{{drop.notes}}"  type="text">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+            </div>
+            <div class="card bg-gradient-primary">
+
+                <div class="card-header ">
+
+
+                    <!-- tools card -->
+                    <div class="card-tools">
+                        <!-- button with a dropdown -->
+                        <button type="button" class="btn btn-primary btn-sm" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <h3 class="card-title" style="text-align: center;">
+                        المرفقات
+                    </h3>
+                    <!-- /. tools -->
+                </div>
+                <div class="card-body bg-gradient-light" dir="rtl">
+                    <div class="row">
+                        <div class="form-group col-lg-12 col-sm-12">
+                            <label>مستند  الإنقطاع عن العمل </label>
+                            <div class="custom-file">
+                                <input type="file"  name="file" class="custom-file-input" id="customFile">
+                                <label class="custom-file-label" for="customFile">إضافة ملف</label>
+
+                            </div>
+                            <div>
+                                <a  href="#files"  id="2" onclick="clickOn(this.id)"
+                                    class="../{{drop.file}}"><li class="fa fa-download"></li></a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+            </div>
+            <!-- /.card -->
+
+            <div class="form-group col-lg-12 col-sm-12">
+                <input type="submit" id="save" class="btn btn-primary" value="حفظ البيانات">
+            </div>
+</div><!-- /.container-fluid -->
+</form>
+</section>
+<!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+{% endblock %}
+{% block footer %}
+
+<script>
+    function clickOn(id) {
+        let x1 = document.getElementById(id).className;
+        const n = x1.includes("employees");
+
+        if (n){
+            window.open(x1, '_blank');
+        }
+        else {
+            createAlert('', 'لا يوجد ملف', '', 'danger', true, true, 'pageMessages');
+            return false;
+        }
+    }
+    function validateForm() {
+
+        const x3 = document.forms["myForm"]["file"].value;
+
+        const fileExtension = ['jpg', 'jpeg', 'png', 'doc', 'docx', 'xml', 'xmlx', 'ppt', 'ppts', 'pdf'];
+
+        const file = x3.slice((x3.lastIndexOf(".") - 1 >>> 0) + 2);
+
+
+
+        if (x3== "" || x3 == null) {
+
+            return true;
+        }
+        else if(!fileExtension.includes(file)){
+            createAlert('', 'صيغة  مستند الإنقطاع عن العمل   غير مدعومة', '', 'danger', true, true, 'pageMessages');
+            return false;
+        }
+
+
+
+    }
+</script>
+<script>
+    $("#drop").last().addClass("active");
+    $("#drop_report").last().addClass("active");
+</script>
+
+
+{% endblock %}
