@@ -1,0 +1,143 @@
+{% extends "dash_base.php" %}
+
+{% block title %}
+ طلب أجازة
+{% endblock %}
+{% block style %}
+
+{% endblock %}
+
+{% block body %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item active"> طلب أجازة</li>
+                        <li class="breadcrumb-item">الأجازات</li>
+                        <li class="breadcrumb-item"><a href="../Dashboard/index">الرئيسية</a></li>
+
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content" dir="">
+        <form method="post" enctype="multipart/form-data" autocomplete="off" id="myForm" name="myForm"
+            onsubmit="return validateForm()" action="approveRequest?{{holiday.id}}">
+            <div class="container-fluid">
+                <!-- left column -->
+
+
+
+
+
+
+
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <!-- general form elements -->
+                        <div class="card bg-gradient-primary">
+
+                            <div class="card-header">
+
+
+                                <!-- tools card -->
+                                <div class="card-tools">
+                                    <!-- button with a dropdown -->
+                                    <button type="button" class="btn btn-primary btn-sm" data-card-widget="collapse">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+
+                                </div>
+                                <!-- /.card-header -->
+                                <!-- form start -->
+                                <h3 class="card-title" style="text-align: center;">
+                                    بيانات طلب الأجازة
+                                </h3>
+                                <!-- /. tools -->
+                            </div>
+                            <div class="card-body" dir="rtl">
+                                <div class="row">
+                                    <div class="form-group col-lg-6 col-sm-12">
+                                        <input type="text"  disabled class="form-control" value="{{holiday.name}}"
+                                            placeholder="اسم الموظف" />
+                                    </div>
+                                    <div class="form-group col-lg-6 col-sm-12">
+                                        <input type="text" disabled class="form-control"
+                                            value="{{holiday.identification_id}}" placeholder="الرقم القومي" />
+                                    </div>
+
+
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-lg-6 col-sm-12">
+                                        <input type="text" class="form-control" disabled
+                                            value="{{holiday.duration}}" placeholder="مدة الأجازة" />
+                                    </div>
+                                    <div class="form-group col-lg-6 col-sm-12">
+                                        <input type="text" class="form-control" disabled value="{{holiday.cause}}"
+                                            placeholder="سبب الأجازة" />
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-lg-6 col-sm-12">
+                                        <input class="date-own form-control" id="datepicker" disabled
+                                             placeholder="{{holiday.start_date}}" type="text">
+                                    </div>
+                                    <div class="form-group col-lg-6 col-sm-12">
+                                        <select class="form-control select2" name="type">
+                                            <option selected="selected" disabled value="">نوع الأجازة</option>
+                                            {% for holiday_type in holidayType%}
+                                            <option value="{{holiday_type.id}}">{{holiday_type.name}}</option>
+                                            {% endfor%}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.card -->
+
+            <div class="form-group col-lg-12 col-sm-12">
+                <input type="submit" id="save" class="btn btn-primary" value="موافقة على الطلب">
+            </div>
+
+        </form>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+{% endblock %}
+{% block footer %}
+
+<script>
+
+    function validateForm() {
+        const x1 = document.forms["myForm"]["type"].value;
+      if (x1 == "" || x1 == null) {
+            createAlert('', 'ادخل نوع الأجازة   ', '', 'danger', true, true, 'pageMessages');
+            document.forms["myForm"]["type"].focus();
+            return false;
+        }
+    }
+</script>
+<script>
+    $("#holidays").last().addClass("active");
+    $("#holidays_request").last().addClass("active");
+</script>
+
+{% endblock %}

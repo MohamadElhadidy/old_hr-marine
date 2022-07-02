@@ -80,8 +80,9 @@ class jobs extends Authenticated
             foreach ($data as &$row){
                 $department= employess::findById($row->department,'departments');
                 $work_place = employess::findById($row->work_place,'work_places');
-                $row->department = $department->name;
-                $row->work_place = $work_place->name;
+                if(isset($department->name))$row->department = $department->name;
+                if(isset($work_place->name))$row->work_place = $work_place->name;
+                
             }
             employess::insertNotificationsAdmin($auth->id,'تم  الدخول    تقرير الموظفيين لوظيفة'.$job->name,'1','jobs','1');
 

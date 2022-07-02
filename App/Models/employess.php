@@ -81,6 +81,22 @@ class employess  extends \Core\Model
 
         return $stmt->fetch();
     }
+    public static  function findEmpNoCom($col,$val)
+    {
+
+        $sql = "SELECT *  FROM data where  `" . $col . "` = :col   AND is_delete = 0 AND status= 0 AND drop_out  = 0";
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':col', $val, PDO::PARAM_INT);
+
+
+        $stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
+        $stmt->execute();
+
+        return $stmt->fetch();
+    }
 
     public  static function fetchNotAllById($val,$col,$table)
     {
@@ -722,6 +738,50 @@ class employess  extends \Core\Model
 
 
             }
+        }
+    }
+
+
+    public static  function getRequests()
+    {
+        $user = Auth::getUser();
+        if ($user) {
+                if(isset($_COOKIE['company']) AND $_COOKIE['company'] != 1){
+                    $sql = 'SELECT *  FROM holiday_requests  where  is_delete = 0   AND done = 0   AND company = :company ';
+
+                }else{
+                    $sql = 'SELECT *  FROM holiday_requests  where  is_delete = 0  AND done = 0  ';
+                }
+
+                $db = static::getDB();
+                $stmt = $db->prepare($sql);
+
+                $stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
+
+                if(isset($_COOKIE['company']) AND $_COOKIE['company'] != 1)  {
+
+                  $stmt->bindValue(':company', $_COOKIE['company'], PDO::PARAM_INT);
+                     }
+
+                $stmt->execute();
+
+                $data = $stmt->fetchAll();
+                if ($data) {
+                    foreach ($data as $row) {
+                        $employee = employess::findByColNoCom($row->identification_id, 'identification_id', 'data');
+                        if (isset($employee->name)) {
+                            $row->is_delete = 2;
+                        }else{
+                              $row->is_delete = 3;
+                        }
+
+                    }
+                }
+
+                return $data;
+
+
+            
         }
     }
 
@@ -2076,6 +2136,44 @@ public static  function getJobStatus()
         }
 
     }
+    public function editHolidayRequest()
+    {
+
+        $employee = self::findEmpNoCom('identification_id', $this->identification_id);
+
+        $sql ='UPDATE   holiday_requests
+                 SET 
+            name = :name,
+            duration = :duration,
+            identification_id = :identification_id,
+            cause=:cause
+              ';
+
+        if ($this->start_date != null) $sql .= " ,start_date='$this->start_date'";
+        if (isset($employee->company)) $sql .= " ,company='$employee->company'";
+
+
+        $sql.='   where id =:id';
+
+        $db = static::getDB();
+        $stmt =$db->prepare($sql);
+
+        $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
+        $stmt->bindValue(':name', $this->name, PDO::PARAM_STR);
+        $stmt->bindValue(':duration', $this->duration, PDO::PARAM_INT);
+        $stmt->bindValue(':identification_id', $this->identification_id, PDO::PARAM_INT);
+        $stmt->bindValue(':cause', $this->cause, PDO::PARAM_STR);
+
+        $user=Auth::getUser();
+        $holiday = self::findByIdNoCom($this->id,'holiday_requests');
+        if($stmt->execute()){
+            employess::insertNotifications($user->id,'تم تعديل طلب أجازة لموظف  '.$holiday->name,'holidays');
+            return true;
+        }else{
+            return false;
+        }
+
+    }
 
     public function deleteHoliday($id)
     {
@@ -2100,6 +2198,78 @@ public static  function getJobStatus()
             employess::insertNotifications($user->id,'تم حذف أجازة لموظف   '.$employee->name,'holidays');
             return true;
         }else{
+            return false;
+        }
+
+    } 
+       public function deleteHolidayRequest($id)
+    {
+
+        $sql ='UPDATE  holiday_requests
+               SET
+               is_delete = 1
+               where 
+                id = :id';
+
+        $db = static::getDB();
+        $stmt =$db->prepare($sql);
+
+        $stmt->bindValue(':id', $id, PDO::PARAM_STR);
+
+        $user=Auth::getUser();
+
+        $holiday = employess::findByIdNoCom($id, 'holiday_requests');
+
+        if($stmt->execute()){
+            employess::insertNotifications($user->id,'تم حذف طلب أجازة لموظف   '.$holiday->name,'holidays');
+            return true;
+        }else{
+            return false;
+        }
+
+    }    
+       public function approveRequest($id)
+    {
+        $holiday = employess::findByIdNoCom($id, 'holiday_requests');
+        $employee = employess::findEmpNoCom('identification_id',  $holiday->identification_id);
+
+        $sql ='UPDATE  holiday_requests
+               SET
+               done = 1
+               where 
+                id = :id';
+
+        $db = static::getDB();
+        $stmt =$db->prepare($sql);
+
+        $stmt->bindValue(':id', $id, PDO::PARAM_STR);
+
+        $user=Auth::getUser();
+
+        if($stmt->execute()){
+
+            $sql ='INSERT INTO holidays
+                (employee ,company ,duration, type,cause,date )
+                VALUES (:employee,:company, :duration, :type,:cause,
+                        :date	)';
+
+        $db = static::getDB();
+        $stmt =$db->prepare($sql);
+
+        $stmt->bindValue(':employee', $employee->id, PDO::PARAM_STR);
+        $stmt->bindValue(':company', $holiday->company, PDO::PARAM_INT);
+        $stmt->bindValue(':duration', $holiday->duration, PDO::PARAM_INT);
+        $stmt->bindValue(':type', $this->type, PDO::PARAM_STR);
+        $stmt->bindValue(':cause', $holiday->cause, PDO::PARAM_STR);
+        $stmt->bindValue(':date', $holiday->start_date, PDO::PARAM_STR);
+
+        if($stmt->execute()){
+           employess::insertNotifications($user->id,'تم الموافقة على  طلب أجازة لموظف   '.$holiday->name,'holidays');
+            return true;
+        }else{
+            return false;
+        }
+                    }else{
             return false;
         }
 

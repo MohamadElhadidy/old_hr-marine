@@ -76,6 +76,22 @@ class holidays extends Authenticated
             flash::addMessage("'لا يوجد لديك الصلاحية'", flash::INFO);
             View::renderTemplate('Dashboard/index.php');
         }
+    } 
+    public function requestAction()
+    {
+        $user = User::getPermission();
+        $auth = Auth::getUser();
+        if(strpos($user->ho , '2')){
+            employess::insertNotificationsAdmin($auth->id,'تم  الدخول  على  تقرير   الأجازات ','1','holidays','1');
+            View::renderTemplate('holidays/requests.html',[
+                'month' => date('m', strtotime('0 month')),
+                'year' => date('Y')
+                ]);
+        }else{
+            employess::insertNotificationsAdmin($auth->id,'تم رفض الدخول  على  تقرير   الأجازات  ','1','holidays','1');
+            flash::addMessage("'لا يوجد لديك الصلاحية'", flash::INFO);
+            View::renderTemplate('Dashboard/index.php');
+        }
     }
     public function viewAction()
     {
@@ -160,6 +176,46 @@ class holidays extends Authenticated
             flash::addMessage("'لا يوجد لديك الصلاحية'", flash::INFO);
             View::renderTemplate('Dashboard/index.php');
         }
+    } 
+     public function deleteHolidayRequestAction()
+    {
+        $user = User::getPermission();
+        $auth = Auth::getUser();
+        if(strpos($user->ho , '5')){
+        $data = new employess();
+        $url = Auth::url();
+        $param = explode('?',$url);
+
+        if ($data->deleteHolidayRequest($param[1])) {
+
+            flash::addMessage("'تم حذف طلب الأجازة بنجاح  '", flash::FAIL);
+            $this->redirect('holidays/request');
+        }
+        }else{
+            employess::insertNotificationsAdmin($auth->id,'تم رفض حذف طلب  أجازة   ','1','holidays','1');
+            flash::addMessage("'لا يوجد لديك الصلاحية'", flash::INFO);
+            View::renderTemplate('Dashboard/index.php');
+        }
+    }  
+       public function approveRequestAction()
+    {
+        $user = User::getPermission();
+        $auth = Auth::getUser();
+        if(strpos($user->ho , '3')){
+        $data = new employess($_POST);
+        $url = Auth::url();
+        $param = explode('?',$url);
+
+        if ($data->approveRequest($param[1])) {
+
+            flash::addMessage("'تم الموافقة على  طلب الأجازة بنجاح  '", flash::SUCCESS);
+            $this->redirect('holidays/request');
+        }
+        }else{
+            employess::insertNotificationsAdmin($auth->id,'تم رفض  الموافقة على طلب  أجازة   ','1','holidays','1');
+            flash::addMessage("'لا يوجد لديك الصلاحية'", flash::INFO);
+            View::renderTemplate('Dashboard/index.php');
+        }
     }
     public function editHolidayAction()
     {
@@ -190,6 +246,24 @@ class holidays extends Authenticated
             flash::addMessage("'لا يوجد لديك الصلاحية'", flash::INFO);
             View::renderTemplate('Dashboard/index.php');
         }
+    } 
+    public function editHolidayRequestAction()
+    {
+        $user = User::getPermission();
+        $auth = Auth::getUser();
+        if(strpos($user->ho , '4')){
+        $data = new employess($_POST);
+
+        if ($data->editHolidayRequest()) {
+
+            flash::addMessage("'تم تعديل طلب الأجازة بنجاح  '", flash::SUCCESS);
+            $this->redirect('holidays/request');
+        }
+        }else{
+            employess::insertNotificationsAdmin($auth->id,'تم رفض     تعديل  طلب أجازة   ','1','holidays','1');
+            flash::addMessage("'لا يوجد لديك الصلاحية'", flash::INFO);
+            View::renderTemplate('Dashboard/index.php');
+        }
     }
     public  function getHolidayAction()
     {
@@ -207,6 +281,46 @@ class holidays extends Authenticated
         ]);
         }else{
             employess::insertNotificationsAdmin($auth->id,'تم رفض الدخول على   تعديل  أجازة   ','1','holidays','1');
+            flash::addMessage("'لا يوجد لديك الصلاحية'", flash::INFO);
+            View::renderTemplate('Dashboard/index.php');
+        }
+    }   
+     public  function getHolidayRequestAction()
+    {
+        $user = User::getPermission();
+        $auth = Auth::getUser();
+        if(strpos($user->ho , '4')){
+        $url = Auth::url();
+        $param = explode('?', $url);
+
+        $holiday = employess::findByIdNoCom($param[1], 'holiday_requests');
+        // $employee = employess::findById($holiday->employee, 'data');
+            employess::insertNotificationsAdmin($auth->id,'تم  الدخول على   تعديل  طلب أجازة    ل'.$holiday->name,'1','holidays','1');
+            view::renderTemplate('holidays/edit_request.html', [
+            'holiday' => $holiday
+        ]);
+        }else{
+            employess::insertNotificationsAdmin($auth->id,'تم رفض الدخول على   تعديل  طلب أجازة   ','1','holidays','1');
+            flash::addMessage("'لا يوجد لديك الصلاحية'", flash::INFO);
+            View::renderTemplate('Dashboard/index.php');
+        }
+    }
+     public  function getApproveRequestAction()
+    {
+        $user = User::getPermission();
+        $auth = Auth::getUser();
+        if(strpos($user->ho , '4')){
+        $url = Auth::url();
+        $param = explode('?', $url);
+
+        $holiday = employess::findByIdNoCom($param[1], 'holiday_requests');
+        // $employee = employess::findById($holiday->employee, 'data');
+            employess::insertNotificationsAdmin($auth->id,'تم  الدخول على   تعديل  طلب أجازة    ل'.$holiday->name,'1','holidays','1');
+            view::renderTemplate('holidays/approve_request.html', [
+            'holiday' => $holiday
+        ]);
+        }else{
+            employess::insertNotificationsAdmin($auth->id,'تم رفض الدخول على   تعديل  طلب أجازة   ','1','holidays','1');
             flash::addMessage("'لا يوجد لديك الصلاحية'", flash::INFO);
             View::renderTemplate('Dashboard/index.php');
         }

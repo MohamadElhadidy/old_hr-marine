@@ -973,7 +973,15 @@
                             </p>
                         </a>
                         <ul class="nav nav-treeview">
-                            {% if '3' in getPermission.ho   %}
+                          {% if '3' in getPermission.ho   %}
+                            <li class="nav-item has-treeview">
+                                <a href="../holidays/request" id="holidays_request" class="nav-link">
+                                    <i class="nav-icon fas fa-table"></i>
+                                    <p>
+                                        طلبات الأجازة
+                                    </p>
+                                </a>
+                            </li>
                             <li class="nav-item has-treeview">
                                 <a href="../holidays/new" id="holidays_new" class="nav-link">
                                     <i class="nav-icon fas fa-plus-circle"></i>

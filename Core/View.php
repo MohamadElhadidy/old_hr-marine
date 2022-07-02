@@ -85,6 +85,7 @@ class View
             $twig->addGlobal('templates',\App\Auth::templates());
             $twig->addGlobal('salaries',\App\Auth::salaries());
             $twig->addGlobal('stats',\App\Auth::stats());
+            $twig->addGlobal('requests',\App\Auth::requests());
             $twig->addGlobal('notifications',\App\Auth::notifications());
 
 

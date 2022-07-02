@@ -210,6 +210,9 @@ public static function getReturnToPage()
     public static function notifications(){
         return employess::getNotifications();
     }
+    public static function requests(){
+        return employess::getRequests();
+    }
 
     public static function url()
     {
